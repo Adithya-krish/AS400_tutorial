@@ -1,0 +1,475 @@
+********CL PROGRAMM 1
+
+PGM        PARM(&A &B &RES)                                   
+DCL        VAR(&A) TYPE(*INT) LEN(2)                          
+DCL        VAR(&B) TYPE(*INT) LEN(2)                          
+DCL        VAR(&RES) TYPE(*INT) LEN(4)                        
+DCL        VAR(&RESC) TYPE(*CHAR) LEN(4)                      
+CHGVAR     VAR(&RES) VALUE(&A + &B)                           
+CHGVAR     VAR(&RESC) VALUE(&RES)                             
+SNDPGMMSG  MSG('ADDITION IS ' *CAT &RESC) TOPGMQ(*EXT)        
+CHGVAR     VAR(&RES) VALUE(&A - &B)                           
+CHGVAR     VAR(&RESC) VALUE(&RES)                             
+SNDPGMMSG  MSG('SUBTRACTION IS ' *CAT &RESC) TOPGMQ(*EXT)     
+CHGVAR     VAR(&RES) VALUE(&A * &B)                           
+CHGVAR     VAR(&RESC) VALUE(&RES)                             
+SNDPGMMSG  MSG('MULTIPLICATION IS ' *CAT &RESC) TOPGMQ(*EXT)  
+/* &A/&B IS NOT ALLOWED &A / &B IS ALLOWED  */                
+CHGVAR     VAR(&RES) VALUE(&A / &B)                           
+CHGVAR     VAR(&RESC) VALUE(&RES)                             
+SNDPGMMSG  MSG('DIVISION IS ' *CAT &RESC) TOPGMQ(*EXT) 
+
+
+*******************CL PROGRAMME 2**********
+
+
+PGM                                                                                            
+             DCL        VAR(&A) TYPE(*INT) LEN(2) VALUE(20)                                    
+             DCL        VAR(&B) TYPE(*INT) LEN(2) VALUE(10)                                    
+/* > IS *GT, < IS *LT, >= IS *GE, <= IS *LE, = IS *EQ, <> IS *NE  */                          
+             IF         COND(&A *GT &B) THEN(DO)                                               
+               SNDPGMMSG MSG(%CHAR(&A) *CAT ' IS GREATER THAN ' *CAT %CHAR(&B)) TOPGMQ(*EXT)   
+               SNDPGMMSG MSG(%CHAR(&A) *CAT ' IS NOT EQUAL TO ' *CAT %CHAR(&B)) TOPGMQ(*EXT)   
+             ENDDO                                                                             
+             IF         COND(&A *EQ &B) THEN(DO)                                               
+               SNDPGMMSG MSG(%CHAR(&A) *CAT ' IS EQUAL TO ' *CAT %CHAR(&B))  TOPGMQ(*EXT)      
+             ENDDO                                                                             
+             IF         COND(&A *LT &B) THEN(DO)                                               
+               SNDPGMMSG MSG(%CHAR(&A) *CAT ' IS LESS THAN ' *CAT %CHAR(&B))  TOPGMQ(*EXT)     
+               SNDPGMMSG MSG(%CHAR(&A) *CAT ' IS NOT EQUAL TO ' *CAT %CHAR(&B)) TOPGMQ(*EXT)   
+             ENDDO                                                                             
+ENDPGM               
+
+
+************CL PROGRAM 3**********************8
+
+
+PGM                                                                             
+             DCL        VAR(&A) TYPE(*INT) LEN(2) VALUE(20)                     
+             DCL        VAR(&B) TYPE(*INT) LEN(2) VALUE(10)                     
+             DCL        VAR(&C) TYPE(*LGL)        VALUE('1')                    
+             DCL        VAR(&D) TYPE(*LGL)        VALUE('0')                    
+/* AND *OR *NOT  */                                                            
+             IF         COND((&A *GT &B) *OR (&A *EQ &B)) THEN(DO)              
+               SNDPGMMSG MSG('&A IS GREATER THAN OR EQUAL TO &B') TOPGMQ(*EXT)  
+             ENDDO                                                              
+             IF         COND((&A *GT 0) *AND (&A *GT &B)) THEN(DO)              
+               SNDPGMMSG MSG('&A IS GREATER THAN 0 AND &B') TOPGMQ(*EXT)        
+             ENDDO                                                              
+         /* *NOT NEGATES LOGICAL VARIABLES */                                   
+             IF         COND(&C *OR *NOT &D) THEN(DO)                           
+               SNDPGMMSG MSG('&C IS ON AND &D IS OFF') TOPGMQ(*EXT)             
+             ENDDO  
+
+
+
+******************CL PROG 4********************
+PGM                                                                               
+             DCL        VAR(&A) TYPE(*INT) LEN(2) VALUE(20)                       
+             DCL        VAR(&B) TYPE(*INT) LEN(2) VALUE(10)                       
+/* IF THEN USED */                                                               
+             IF         COND(&A *GT &B) THEN(GOTO FINAL)                          
+             IF         COND(&A *LT &B) THEN(CHGVAR VAR(&A) VALUE(&B))            
+START:                                                                           
+/* IF DO-ENDDO USED */                                                           
+             IF         COND(&A *GE &B) THEN(DO)                                  
+               SNDPGMMSG MSG('A IS GREATER THAN OR EQUAL TO B')  TOPGMQ(*EXT)     
+               GOTO END                                                           
+             ENDDO                                                                
+/* IF DO-ENDDO ELSE DO-ENDDO USED */                                             
+             IF         COND(&A *GE &B) THEN(DO)                                  
+               SNDPGMMSG MSG('A IS GREATER THAN OR EQUAL TO B')  TOPGMQ(*EXT)     
+               GOTO END                                                           
+             ENDDO           
+
+
+  ELSE       CMD(DO)                                            
+0001.21                SNDPGMMSG MSG('A IS LESS THAN B')  TOPGMQ(*EXT)             
+0001.22                GOTO END                                                    
+0001.23              ENDDO                                                         
+0001.24 FINAL:                                                                     
+0001.25                SNDPGMMSG MSG('A IS GREATER THAN B')  TOPGMQ(*EXT)          
+0001.26                GOTO START                                                  
+0001.27 END:                                                                       
+0002.00 ENDPGM                       
+
+
+
+
+PGM                                                                                 
+
+             DCL        VAR(&FNAME) TYPE(*CHAR) LEN(5)  VALUE('RAVI ')              
+
+             DCL        VAR(&LNAME) TYPE(*CHAR) LEN(5)  VALUE('NAIR' )              
+
+/* *CAT IS ||, *BCAT IS |>, *TCAT IS |<  */                                        
+
+             SNDPGMMSG MSG('CAT  OUTPUT IS ' *CAT &FNAME *CAT  &LNAME) TOPGMQ(*EXT) 
+
+             SNDPGMMSG MSG('BCAT OUTPUT IS ' *CAT &FNAME *BCAT &LNAME) TOPGMQ(*EXT) 
+
+             SNDPGMMSG MSG('TCAT OUTPUT IS ' *CAT &FNAME *TCAT &LNAME) TOPGMQ(*EXT) 
+
+ENDPGM                                                                              
+ 
+program for if-else
+ 
+PGM                                                                               
+
+             DCL        VAR(&A) TYPE(*INT) LEN(2) VALUE(20)                       
+
+             DCL        VAR(&B) TYPE(*INT) LEN(2) VALUE(10)                       
+
+/* IF THEN USED */                                                               
+
+             IF         COND(&A *GT &B) THEN(GOTO FINAL)                          
+
+             IF         COND(&A *LT &B) THEN(CHGVAR VAR(&A) VALUE(&B))            
+
+START:                                                                           
+
+/* IF DO-ENDDO USED */                                                           
+
+             IF         COND(&A *GE &B) THEN(DO)                                  
+
+               SNDPGMMSG MSG('A IS GREATER THAN OR EQUAL TO B')  TOPGMQ(*EXT)     
+
+               GOTO END                                                           
+
+             ENDDO                                                                
+
+/* IF DO-ENDDO ELSE DO-ENDDO USED */                                             
+
+             IF         COND(&A *GE &B) THEN(DO)                                  
+
+               SNDPGMMSG MSG('A IS GREATER THAN OR EQUAL TO B')  TOPGMQ(*EXT)     
+
+               GOTO END                                                           
+
+             ENDDO                                                                
+ 
+0001.20              ELSE       CMD(DO)                                            
+
+0001.21                SNDPGMMSG MSG('A IS LESS THAN B')  TOPGMQ(*EXT)             
+
+0001.22                GOTO END                                                    
+
+0001.23              ENDDO                                                         
+
+0001.24 FINAL:                                                                     
+
+0001.25                SNDPGMMSG MSG('A IS GREATER THAN B')  TOPGMQ(*EXT)          
+
+0001.26                GOTO START                                                  
+
+0001.27 END:                                                                       
+
+0002.00 ENDPGM                                                                     
+ 
+select-when
+ 
+PGM                                                                    
+
+             DCL        VAR(&A) TYPE(*INT) LEN(2) VALUE(20)            
+
+             DCL        VAR(&B) TYPE(*INT) LEN(2) VALUE(10)            
+
+             DCL        VAR(&C) TYPE(*INT) LEN(4)                      
+
+             DCL        VAR(&CC) TYPE(*CHAR) LEN(4)                    
+
+             DCL        VAR(&OPT) TYPE(*CHAR) LEN(1) VALUE('+')        
+
+             SELECT                                                    
+
+             WHEN       COND(&OPT = '+') THEN(CHGVAR VAR(&C) +         
+
+                          VALUE(&A + &B))                              
+
+             WHEN       COND(&OPT = '-') THEN(CHGVAR VAR(&C) +         
+
+                          VALUE(&A - &B))                              
+
+             WHEN       COND(&OPT = '*') THEN(CHGVAR VAR(&C) +         
+
+                          VALUE(&A * &B))                              
+
+             WHEN       COND(&OPT = '/') THEN(CHGVAR VAR(&C) +         
+
+                          VALUE(&A / &B))                              
+
+             OTHERWISE  CMD(GOTO CMDLBL(END))                          
+
+             ENDSELECT                                                 
+
+             CHGVAR     VAR(&CC) VALUE(&C)                             
+ 
+0001.20              SNDPGMMSG MSG('RESULT IS ' *CAT &CC)     
+
+0001.21                                                       
+
+0001.28 END:                                                  
+
+0002.00 ENDPGM                                                
+ 
+PGM                                                                            
+
+             DCL        VAR(&A) TYPE(*INT) LEN(2) VALUE(1)                     
+
+             DCL        VAR(&AC) TYPE(*CHAR) LEN(2)                            
+
+             DCL        VAR(&I) TYPE(*INT) LEN(2) VALUE(4)                     
+
+             DCL        VAR(&IC) TYPE(*CHAR) LEN(2)                            
+
+             DCL        VAR(&C) TYPE(*INT) LEN(4)                              
+
+             DCL        VAR(&CC) TYPE(*CHAR) LEN(4)                            
+
+             IF         COND(&I *LE 0) THEN(DO)                                
+
+               SNDPGMMSG MSG('ENTER NON POSITIVE 1 DIGIT INTEGER')             
+
+               GOTO END                                                        
+
+             ENDDO                                                             
+
+             CHGVAR VAR(&IC) VALUE(&I)                                         
+
+             SNDPGMMSG MSG('TABLE OF ' *CAT &IC)                               
+
+             DOUNTIL (&A = 11)                                                 
+
+               CHGVAR VAR(&C) VALUE(&A * &I)                                   
+
+               CHGVAR VAR(&AC) VALUE(&A)                                       
+
+               CHGVAR VAR(&CC) VALUE(&C)                                       
+
+               SNDPGMMSG MSG(&IC *CAT ' ' *CAT '*' *CAT ' ' *CAT +             
+ 
+                             &AC *CAT '=' *CAT &CC) TOPGMQ(*EXT) 
+
+               CHGVAR VAR(&A) VALUE(&A+1)                        
+
+             ENDDO                                               
+
+END:                                                             
+
+ENDPGM                                                           
+ 
+   DOWHILE (&A < 11)      
+ 
+for loop
+ 
+PGM                                                                 
+
+             DCL        VAR(&A) TYPE(*INT) LEN(2)                   
+
+             DCL        VAR(&AC) TYPE(*CHAR) LEN(2)                 
+
+             DCL        VAR(&I) TYPE(*INT) LEN(2) VALUE(4)          
+
+             DCL        VAR(&IC) TYPE(*CHAR) LEN(2)                 
+
+             DCL        VAR(&C) TYPE(*INT) LEN(4)                   
+
+             DCL        VAR(&CC) TYPE(*CHAR) LEN(4)                 
+
+             IF         COND(&I *LE 0) THEN(DO)                     
+
+               SNDPGMMSG MSG('ENTER NON POSITIVE 1 DIGIT INTEGER')  
+
+               GOTO END                                             
+
+             ENDDO                                                  
+
+             CHGVAR VAR(&IC) VALUE(&I)                              
+
+             SNDPGMMSG MSG('TABLE OF ' *CAT &IC) TOPGMQ(*EXT)       
+
+             /* BY CAN HAVE VALUE MORE THAN 1 ALSO  */              
+
+             DOFOR  VAR(&A) FROM(1) TO(10) BY(1)                    
+
+               CHGVAR VAR(&C) VALUE(&A * &I)                        
+
+               CHGVAR VAR(&AC) VALUE(&A)                            
+
+               CHGVAR VAR(&CC) VALUE(&C)                            
+ 
+               SNDPGMMSG MSG(&IC *CAT ' ' *CAT '*' *CAT ' ' *CAT +  
+&AC *CAT '=' *CAT &CC) TOPGMQ(*EXT)    
+
+             ENDDO                                                  
+
+END:                                                                
+
+ENDPGM                                                              
+ 
+PGM                                                                                         
+
+             DCL        VAR(&A) TYPE(*INT) LEN(2)                                           
+
+             DCL        VAR(&AC) TYPE(*CHAR) LEN(2)                                         
+
+             DCL        VAR(&I) TYPE(*INT) LEN(2) VALUE(4)                                  
+
+             DCL        VAR(&IC) TYPE(*CHAR) LEN(2)                                         
+
+             DCL        VAR(&C) TYPE(*INT) LEN(4)                                           
+
+             DCL        VAR(&CC) TYPE(*CHAR) LEN(4)                                         
+
+             IF         COND(&I *LE 0) THEN(DO)                                             
+
+               SNDPGMMSG MSG('ENTER NON POSITIVE 1 DIGIT INTEGER')                          
+
+               GOTO END                                                                     
+
+             ENDDO                                                                          
+
+             CHGVAR VAR(&IC) VALUE(&I)                                                      
+
+             SNDPGMMSG MSG('TABLE OF ' *CAT &IC *CAT ' IN REVERSE ORDER') TOPGMQ(*EXT)      
+
+             DOFOR  VAR(&A) FROM(10) TO(1) BY(-1)                                           
+
+               CHGVAR VAR(&C) VALUE(&A * &I)                                                
+
+               CHGVAR VAR(&AC) VALUE(&A)                                                    
+
+               CHGVAR VAR(&CC) VALUE(&C)                                                    
+
+               SNDPGMMSG MSG(&IC *CAT ' ' *CAT '*' *CAT ' ' *CAT +                          
+
+ 
+0001.21                              &AC *CAT '=' *CAT &CC) TOPGMQ(*EXT)    
+
+0001.23              ENDDO                                                  
+
+0001.28 END:                                                                
+
+0002.00 ENDPGM                                                              
+ 
+leave-iterate
+ 
+PGM                                                                 
+
+             DCL        VAR(&A) TYPE(*INT) LEN(2)                   
+
+             DCL        VAR(&AC) TYPE(*CHAR) LEN(2)                 
+
+             DCL        VAR(&I) TYPE(*INT) LEN(2) VALUE(4)          
+
+             DCL        VAR(&IC) TYPE(*CHAR) LEN(2)                 
+
+             DCL        VAR(&C) TYPE(*INT) LEN(4)                   
+
+             DCL        VAR(&CC) TYPE(*CHAR) LEN(4)                 
+
+             IF         COND(&I *LE 0) THEN(DO)                     
+
+               SNDPGMMSG MSG('ENTER NON POSITIVE 1 DIGIT INTEGER')  
+
+               GOTO END                                             
+
+             ENDDO                                                  
+
+             CHGVAR VAR(&IC) VALUE(&I)                              
+
+             SNDPGMMSG  MSG('TABLE OF ' *CAT &IC *CAT ' TILL 8 +    
+
+                          EXCLUDING 3') TOPGMQ(*EXT)                
+
+             /* BY CAN HAVE VALUE MORE THAN 1 ALSO  */              
+
+             DOFOR  VAR(&A) FROM(1) TO(10) BY(1)                    
+
+               IF         COND(&A > 8) THEN(LEAVE)                  
+
+               IF         COND(&A = 3) THEN(ITERATE)                
+ 
+               CHGVAR VAR(&C) VALUE(&A * &I)                      
+
+               CHGVAR VAR(&AC) VALUE(&A)                          
+
+               CHGVAR VAR(&CC) VALUE(&C)                          
+
+               SNDPGMMSG MSG(&IC *CAT ' ' *CAT '*' *CAT ' ' *CAT +
+&AC *CAT '=' *CAT &CC) TOPGMQ(*EXT)  
+
+             ENDDO                                                
+
+END:                                                              
+
+ENDPGM                                                            
+ 
+PGM                                                                    
+
+             DCL        VAR(&A) TYPE(*INT) LEN(2) VALUE(20)            
+
+             DCL        VAR(&B) TYPE(*INT) LEN(2) VALUE(10)            
+
+             DCL        VAR(&OPT) TYPE(*CHAR) LEN(1) VALUE('/')        
+
+             DCL        VAR(&RES) TYPE(*INT) LEN(4)                    
+
+             DCL        VAR(&RESC) TYPE(*CHAR) LEN(4)                  
+
+          /*RETURN VALUE SHOULD BE OF INT LEN 4*/                      
+
+             IF         COND(&OPT = '+') THEN(CALLSUBR SUBR(ADDSUBR) + 
+
+                          RTNVAL(&RES))                                
+
+             IF         COND(&OPT = '-') THEN(CALLSUBR SUBR(SUBSUBR) + 
+
+                          RTNVAL(&RES))                                
+
+             IF         COND(&OPT = '*') THEN(CALLSUBR SUBR(MULSUBR) + 
+
+                          RTNVAL(&RES))                                
+
+             IF         COND(&OPT = '/') THEN(CALLSUBR SUBR(DIVSUBR) + 
+
+                          RTNVAL(&RES))                                
+
+             CHGVAR     VAR(&RESC) VALUE(&RES)                         
+
+             SNDPGMMSG  MSG('RESULT IS ' *CAT &RESC) TOPGMQ(*EXT)      
+
+          /*ADD SUBROUTINE */                                          
+ 
+    SUBR       SUBR(ADDSUBR)                  
+
+    CHGVAR     VAR(&RES) VALUE(&A + &B)       
+
+    ENDSUBR    RTNVAL(&RES)                   
+
+/*SUB SUBROUTINE */                          
+
+    SUBR       SUBR(SUBSUBR)                  
+
+    CHGVAR     VAR(&RES) VALUE(&A - &B)       
+
+    ENDSUBR    RTNVAL(&RES)                   
+
+/*MUL SUBROUTINE */                          
+
+    SUBR       SUBR(MULSUBR)                  
+
+    CHGVAR     VAR(&RES) VALUE(&A * &B)       
+ 
+             ENDSUBR    RTNVAL(&RES)               
+
+          /*DIV SUBROUTINE */                      
+
+             SUBR       SUBR(DIVSUBR)              
+
+             CHGVAR     VAR(&RES) VALUE(&A / &B)   
+
+             ENDSUBR    RTNVAL(&RES)               
+
+ENDPGM                                             
+ 
