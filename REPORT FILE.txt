@@ -1,0 +1,20 @@
+REPORT FILE *****************
+
+STRRLU =>
+
+RPGvar32 => 
+
+DSPDBR
+
+
+DFLCATGRP(*NO) => TO DO 14
+DFTACTGRP(*YES) => TO DO 15
+
+P101
+
+RPGVAR80 TO RPGVAR 8== : SERVICE PROGRAM
+
+
+dspffd => to see printer file number
+
+SRECNO		4S  OH	SFLRCDNBR

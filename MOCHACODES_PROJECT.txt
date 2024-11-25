@@ -1,0 +1,1164 @@
+ Columns . . . :    1 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                  CREDENTIAL 
+ FMT PF .....A..........T.Name++++++RLen++TDpB......Functions+++++++++++++++++++++++++++ ...+... 9 ...+... 0                        
+        *************** Beginning of data ***************************************************************************************   
+0001.00      A          R LOGINR                                                                                 241104             
+0002.00      A            UNAME         10A         COLHDG('USER NAME')                                          241104             
+0003.00      A            PASSWORD      10A         COLHDG('PASSWORD')                                           241104             
+0004.00      A          K UNAME                                                                                  241104             
+        ****************** End of data ******************************************************************************************   
+
+
+
+
+ Columns . . . :    1 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                      DAMAGE 
+ FMT PF .....A..........T.Name++++++RLen++TDpB......Functions+++++++++++++++++++++++++++ ...+... 9 ...+... 0                        
+        *************** Beginning of data ***************************************************************************************   
+0001.00      A          R REC4                                                                                   241104             
+0002.00      A            ITMCODE        3A         COLHDG('ITEM CODE')                                          241104             
+0003.00      A            USER          10A         COLHDG('EMPLOYEE')                                           241104             
+0004.00      A            REASON         7A         COLHDG('REASON')                                             241104             
+0005.00      A            DATE            L         COLHDG('DATE OF DAMAGE')                                     241104             
+0005.01      A            LOSS           3P 0       COLHDG('QUANTITY LOSS')                                      241104             
+0006.00      A          K ITMCODE                                                                                241104             
+        ****************** End of data ******************************************************************************************   
+
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                        DMG1 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0001.00 H OPTION(*SRCSTMT)                                                                                  241105                  
+0001.01 FDAMAGE    O    E           K DISK    PREFIX(R)                                                     241107                  
+0001.02 FMASTER    UF   E           K DISK    PREFIX(M)                                                     241107                  
+0002.01 FDS        CF   E             WORKSTN                                                               241107                  
+0005.00  *                                                                                                  241105                  
+0006.00 C/EXEC SQL                                                                                          241105                  
+0007.00 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                                                  241105                  
+0008.00 C+ COMMIT = *NONE                                                                                   241105                  
+0008.01 c/END-EXEC                                                                                          241105                  
+0023.00 C                   DOW       (*IN03= *OFF)                                                         241105                  
+0023.01 C                   EXFMT     DAMAGED                                                               241107                  
+0023.02 C                   IF        *IN06 = *ON                                                           241105                  
+0023.03 C                   EVAL      RITMCODE = ITMCODE                                                    241107                  
+0023.04 C                   EVAL      RUSER    = USER                                                       241107                  
+0023.05 C                   EVAL      RREASON  = REASON                                                     241107                  
+0023.06 C                   EVAL      RDATE    = DATE                                                       241107                  
+0023.07 C                   EVAL      RLOSS    = LOSS                                                       241107                  
+0023.13  *                                                                                                  241105                  
+0023.14 C     RITMCODE      CHAIN     MASTER                                                                241107                  
+0023.15 C                   IF        %FOUND(MASTER)                                                        241107    
+0023.16 C                   IF        MINHAND >= RLOSS                                                      241107    
+0023.17 C                   EVAL      MINHAND = MINHAND - RLOSS                                             241107    
+0023.18 C                   EVAL      MVALUE = MINHAND * MPRICE                                             241107    
+0023.19 C                   UPDATE    REC1                                                                  241107    
+0023.20 C     'RECEIVED'    DSPLY                                                                           241107    
+0023.21 C                   ELSE                                                                            241107    
+0023.22 C     'NO STOCK'    DSPLY                                                                           241107    
+0023.23 C                   ENDIF                                                                           241107    
+0023.24 C                   ELSE                                                                            241107    
+0023.25 C     'NOT FOUND'   DSPLY                                                                           241107    
+0023.26 C                   ENDIF                                                                           241107    
+0023.27 C                   WRITE(E)  REC4                                                                  241107    
+0041.00 C                   ENDIF                                                                           241105    
+0041.01 C                   EVAL      *IN06 = *OFF                                                          241107    
+0041.02 C                   EXFMT     DAMAGED                                                               241107    
+0042.00 C                   ENDDO                                                                           241105    
+0042.01  *                                                                                                  241105    
+0046.00 C                   EVAL      *INLR = *ON                                                           241105    
+        ****************** End of data *******************************************************************************
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                        DMG2 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0001.00 H OPTION(*SRCSTMT)                                                                                  241105                  
+0001.01 FDAMAGE    O    E           K DISK    PREFIX(R)                                                     241107                  
+0001.02 FMASTER    UF   E           K DISK    PREFIX(M)                                                     241107                  
+0002.01 FDS        CF   E             WORKSTN                                                               241107                  
+0005.00  *                                                                                                  241105                  
+0006.00 C/EXEC SQL                                                                                          241105                  
+0007.00 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                                                  241105                  
+0008.00 C+ COMMIT = *NONE                                                                                   241105                  
+0008.01 c/END-EXEC                                                                                          241105                  
+0023.00 C                   DOW       (*IN03= *OFF)                                                         241105                  
+0023.01 C                   EXFMT     DAMAGED                                                               241107                  
+0023.02 C                   IF        *IN06 = *ON                                                           241105                  
+0023.13  *                                                                                                  241105                  
+0023.14 C     ITMCODE       CHAIN     MASTER                                                                241107                  
+0023.15 C                   IF        %FOUND(MASTER)                                                        241107                  
+0023.16 C                   EVAL      RITMCODE = ITMCODE                                                    241107                  
+0023.17 C                   EVAL      RUSER    = USER                                                       241107                  
+0023.18 C                   EVAL      RREASON  = REASON                                                     241107                  
+0023.19 C                   EVAL      RDATE    = DATE                                                       241107                  
+0023.20 C                   EVAL      RLOSS    = LOSS                                                       241107
+0023.21 C                   IF        MINHAND >= RLOSS                                                      241107
+0023.22 C                   EVAL      MINHAND = MINHAND - RLOSS                                             241107
+0023.23 C                   EVAL      MVALUE = MINHAND * MPRICE                                             241107
+0023.24 C                   UPDATE    REC1                                                                  241107
+0023.25 C     'RECEIVED'    DSPLY                                                                           241107
+0023.26 C                   ELSE                                                                            241107
+0023.27 C     'NO STOCK'    DSPLY                                                                           241107
+0023.28 C                   ENDIF                                                                           241107
+0023.29 C                   ELSE                                                                            241107
+0023.30 C     'NOT FOUND'   DSPLY                                                                           241107
+0023.31 C                   ENDIF                                                                           241107
+0023.32 C                   WRITE(E)  REC4                                                                  241107
+0041.00 C                   ENDIF                                                                           241105
+0041.01 C                   EVAL      *IN06 = *OFF                                                          241107
+0041.02 C                   EXFMT     DAMAGED                                                               241107
+0042.00 C                   ENDDO                                                                           241105
+0042.01  *                                                                                                  241105
+0046.00 C                   EVAL      *INLR = *ON                                                           241105
+        ****************** End of data ***************************************************************************
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                      DMUPDT 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0000.01 H OPTION(*NODEBUGIO : *SRCSTMT)                                                                     241105                  
+0000.02 FMASTER    UF   E           K DISK    PREFIX(M)                                                     241107                  
+0000.03 FDAMAGE    UF   E             DISK    PREFIX(L)                                                     241107                  
+0000.04 FDS        CF   E             WORKSTN PREFIX(D)                                                     241105                  
+0000.05  *                                                                                                  241107                  
+0000.07  *                                                                                                  241107                  
+0000.09 C                   DOW       *IN03 = *OFF                                                          241105                  
+0000.10 C                   EXFMT     DAMAGED                                                               241105                  
+0000.11 C     DITMCODE      CHAIN     MASTER                                                                241107                  
+0000.14 C                   IF        *IN06 = *ON                                                           241105                  
+0000.15 C                   EVAL      LITMCODE = DITMCODE                                                   241107                  
+0000.16 C                   EVAL      LUSER = DUSER                                                         241107                  
+0000.17 C                   EVAL      LREASON = DREASON                                                     241107                  
+0000.18 C                   EVAL      LDATE = DDATE                                                         241107                  
+0000.19 C                   EVAL      LLOSS = DLOSS                                                         241107                  
+0011.01  *                                                                                                  241107                  
+0011.02 C                   UPDATE    REC4                                                                  241107                  
+0011.06 C                   EXFMT     DAMAGED                                                               241107                  
+0011.08 C                   ENDIF                                                                           241107                  
+0011.08 C                   ENDIF                                                                           241107  
+0011.22 C                   ENDDO                                                                           241105  
+0012.00 C                   SETON                                        LR                                 241105  
+        ****************** End of data *****************************************************************************
+
+
+ Columns . . . :    1 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                          DS 
+ FMT A* .....A*. 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8 ...+... 9 ...+... 0                        
+        *************** Beginning of data ***************************************************************************************   
+0000.10      A*%%TS  SD  20241107  161959  TEN03       REL-V7R1M0  5770-WDS                                      241107             
+0000.20      A*%%EC                                                                                              241107             
+0000.30      A                                      DSPSIZ(24 80 *DS3)                                           241107             
+0000.40      A                                      CA03(03 'EXIT')                                              241107             
+0000.50      A                                      CF02(02 'CHANGE')                                            241107             
+0000.60      A                                      CF04(04 'DELETE')                                            241107             
+0000.70      A                                      CF06(06 'ADD')                                               241107             
+0000.80      A          R DAMAGED                                                                                241107             
+0000.90      A*%%TS  SD  20241107  161959  TEN03       REL-V7R1M0  5770-WDS                                      241107             
+0001.00      A                                  2  3'USER:'                                                      241107             
+0001.10      A                                      COLOR(TRQ)                                                   241107             
+0001.20      A                                  2  9USER                                                         241107             
+0001.30      A                                      COLOR(WHT)                                                   241107             
+0001.40      A                                  2 64'DATE:'                                                      241107             
+0001.50      A                                      COLOR(TRQ)                                                   241107             
+0001.60      A                                  2 70DATE                                                         241107             
+0001.70      A                                      EDTCDE(Y)                                                    241107             
+0001.80      A                                      COLOR(WHT)                                                   241107             
+0001.90      A                                  4 64'TIME:'                                                      241107             
+0002.00      A                                      COLOR(TRQ)                                                   241107
+0002.10      A                                  4 70TIME                                                         241107
+0002.20      A                                      COLOR(WHT)                                                   241107
+0002.30      A                                  5 32'GOODS DAMAGED'                                              241107
+0002.40      A                                      COLOR(BLU)                                                   241107
+0002.50      A                                 23 26'F3=EXIT'                                                    241107
+0002.60      A                                      COLOR(TRQ)                                                   241107
+0002.70      A                                 23 58'F6=ADD'                                                     241107
+0002.80      A                                      COLOR(TRQ)                                                   241107
+0002.90      A                                  8  6'ITEMCODE'                                                   241107
+0003.00      A                                      COLOR(RED)                                                   241107
+0003.10      A                                  8 18'USER'                                                       241107
+0003.20      A                                      COLOR(RED)                                                   241107
+0003.30      A                                  8 49'DATE'                                                       241107
+0003.40      A                                      COLOR(RED)                                                   241107
+0003.50      A                                  8 64'LOSS'                                                       241107
+0003.60      A                                      COLOR(RED)                                                   241107
+0003.70      A                                  8 34'REASON'                                                     241107
+0003.80      A                                      COLOR(RED)                                                   241107
+0003.90      A            ITMCODE   R        B 10  6REFFLD(REC4/ITMCODE ABCD/DAMAGE)                             241107
+0004.00      A                                      COLOR(WHT)                                                   241107
+0004.10      A            USER      R        B 10 18REFFLD(REC4/USER ABCD/DAMAGE)                                241107
+0004.20      A                                      COLOR(WHT)                                                   241107
+0004.30      A            REASON    R        B 10 34REFFLD(REC4/REASON ABCD/DAMAGE)                              241107
+0004.40      A                                      COLOR(WHT)                                                   241107
+0004.50      A            DATE      R        B 10 49REFFLD(REC4/DATE ABCD/DAMAGE)                                241107
+0004.60      A                                      COLOR(WHT)                                                   241107
+0004.70      A            LOSS      R        B 10 64REFFLD(REC4/LOSS ABCD/DAMAGE)                                241107
+0004.80      A                                      COLOR(WHT)                                                   241107
+0004.90      A                                  6 31'---------------'                                            241107
+0005.00      A                                      COLOR(YLW)                                                   241107
+0005.10      A                                 23 40'F12= CANCEL'                                                241107
+        ****************** End of data ********************************************************************************
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                       EDSGR 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0001.00 H OPTION(*SRCSTMT)                                                                                  241105                  
+0002.01 FENTRYDSP1 CF   E             WORKSTN PREFIX(A)                                                     241105                  
+0005.00  *                                                                                                  241105                  
+0006.00 C/EXEC SQL                                                                                          241105                  
+0007.00 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                                                  241105                  
+0008.00 C+ COMMIT = *NONE                                                                                   241105                  
+0008.01 c/END-EXEC                                                                                          241105                  
+0023.00 C                   DOW       (*IN03= *OFF) AND (SQLCOD = 0)                                        241105                  
+0023.01 C                   EXFMT     RECEIVE                                                               241105                  
+0031.00 C                   IF        *IN02 = *ON                                                           241105                  
+0032.00 C/EXEC SQL                                                                                          241105                  
+0033.00 C+  UPDATE ABCD/RECIEVED                                                                            241105                  
+0034.00 C+  SET  DATE=:ADATE,QTYREC =:AQTYREC,                                                              241105                  
+0035.00 C+  PRICE = :APRICE WHERE RECCODE = :ARECCODE                                                       241105                  
+0036.00 C/END-EXEC                                                                                          241105                  
+0036.01 C                   ENDIF                                                                           241105                  
+0036.02 C                   EXFMT     RECEIVE                                                               241105                  
+0036.03 C                   IF        *IN04 = *ON                                                           241105                  
+0037.00 C/EXEC SQL                                                                                          241105                  
+0038.00 C+ DELETE FROM ABCD/RECIEVED                                                                        241105 
+0039.00 C+ WHERE RECCODE = :ARECCODE                                                                        241105 
+0040.00 C/END-EXEC                                                                                          241105 
+0041.00 C                   ENDIF                                                                           241105 
+0042.00 C                   ENDDO                                                                           241105 
+0042.01  *                                                                                                  241105 
+0046.00 C                   EVAL      *INLR = *ON                                                           241105 
+        ****************** End of data ****************************************************************************
+                                                                                                                   
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                     DMUPDT1 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0000.01 H OPTION(*NODEBUGIO : *SRCSTMT)                                                                     241105                  
+0000.02 FDS        CF   E             WORKSTN PREFIX(D)                                                     241105                  
+0000.03 C/EXEC SQL                                                                                          241105                  
+0000.04 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                                                  241105                  
+0000.05 C+            COMMIT = *NONE                                                                        241105                  
+0000.06 C/END-EXEC                                                                                          241105                  
+0000.07 C                   DOW       *IN03 = *OFF                                                          241105                  
+0000.08 C                   EXFMT     DAMAGED                                                               241105                  
+0000.09 C                   IF        *IN06 = *ON                                                           241105                  
+0007.00 C/EXEC SQL                                                                                          241105                  
+0008.00 C+ INSERT INTO HEMA/DAMAGE (ITMCODE, "USER",REASON, "DATE", LOSS)                                   241105                  
+0009.00 C+ VALUES(:DITMCODE, :DUSER,:DREASON, :DDATE, :DLOSS)                                               241105                  
+0011.00 C/END-EXEC                                                                                          241105                  
+0011.01 C                   EXFMT     DAMAGED                                                               241105                  
+0011.02 C                   ENDIF                                                                           241105                  
+0011.03 C                   EVAL      *IN06 = *OFF                                                          241105                  
+0011.04 C                   IF        *IN02 = *ON                                                           241105                  
+0011.05 C/EXEC SQL                                                                                          241105                  
+0011.06 C+ UPDATE DAMAGE SET USER = :DUSER,                                                                 241105                  
+0011.07 C+  REASON = :DREASON, DATE = :DDATE, LOSS = :DLOSS                                                 241105 
+0011.09 C+ WHERE ITMCODE =:DITMCODE                                                                         241105 
+0011.10 C/END-EXEC                                                                                          241105 
+0011.11 C                   EXFMT     DAMAGED                                                               241105 
+0011.12 C                   ENDIF                                                                           241105 
+0011.13 C                   EVAL      *IN02 = *OFF                                                          241105 
+0011.14 C                   IF        *IN04 = *ON                                                           241105 
+0011.15 C/EXEC SQL                                                                                          241105 
+0011.16 C+ DELETE FROM DAMAGE                                                                               241105 
+0011.17 C+ WHERE ITMCODE = :DITMCODE                                                                        241105 
+0011.18 C/END-EXEC                                                                                          241105 
+0011.19 C                   EXFMT     DAMAGED                                                               241105 
+0011.20 C                   ENDIF                                                                           241105 
+0011.21 C                   EVAL      *IN04 = *OFF                                                          241105 
+0011.22 C                   ENDDO                                                                           241105 
+0012.00 C                   SETON                                        LR                                 241105 
+        ****************** End of data ****************************************************************************
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                       EDSIS 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0001.00 H OPTION(*SRCSTMT)                                                                                  241105                  
+0002.01 FENTRYDSP  CF   E             WORKSTN PREFIX(A)                                                     241105                  
+0005.00  *                                                                                                  241105                  
+0006.00 C/EXEC SQL                                                                                          241105                  
+0007.00 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                                                  241105                  
+0008.00 C+ COMMIT = *NONE                                                                                   241105                  
+0008.01 c/END-EXEC                                                                                          241105                  
+0023.00 C                   DOW       (*IN03= *OFF) AND (SQLCOD = 0)                                        241105                  
+0023.01 C                   EXFMT     ISSUE                                                                 241105                  
+0023.02 C                   IF        *IN06 = *ON                                                           241105                  
+0023.03 C/EXEC SQL                                                                                          241105                  
+0023.04 C+ INSERT INTO PRO/ISSUED(ISSCODE,USER,DATE,QNTY)                                                   241105                  
+0023.05 C+ VALUES(:AISSCODE, :AUSER, :ADATE,:AQNTY)                                                         241105                  
+0023.06 C/END-EXEC                                                                                          241105                  
+0023.07  *                                                                                                  241105                  
+0029.00 C                   ENDIF                                                                           241105                  
+0030.00 C                   EXFMT     ISSUE                                                                 241105                  
+0031.00 C                   IF        *IN02 = *ON                                                           241105                  
+0032.00 C/EXEC SQL                                                                                          241105                  
+0033.00 C+  UPDATE PRO/ISSUED                                                                               241105 
+0034.00 C+  SET  DATE=:ADATE,QNTY =:AQNTY                                                                   241105 
+0035.00 C+   WHERE ISSCODE = :AISSCODE                                                                      241105 
+0036.00 C/END-EXEC                                                                                          241105 
+0036.01 C                   ENDIF                                                                           241105 
+0036.02 C                   EXFMT     ISSUE                                                                 241105 
+0036.03 C                   IF        *IN04 = *ON                                                           241105 
+0037.00 C/EXEC SQL                                                                                          241105 
+0038.00 C+ DELETE FROM PRO/ISSUED                                                                           241105 
+0039.00 C+ WHERE ISSCODE = :AISSCODE                                                                        241105 
+0040.00 C/END-EXEC                                                                                          241105 
+0041.00 C                   ENDIF                                                                           241105 
+0042.00 C                   ENDDO                                                                           241105 
+0042.01  *                                                                                                  241105 
+0046.00 C                   EVAL      *INLR = *ON                                                           241105 
+        ****************** End of data ****************************************************************************
+
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                   PRINTER30 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0001.00 H Option(*NODEBUGIO)                                                                                241024                  
+0001.01 FMASTER    IF   E             DISK                                                                  241107                  
+0002.00 FR3        O    E             PRINTER                                                               241107                  
+0002.03 DDIFFER           S              3P 0                                                               241107                  
+0003.00  *                                                                                                  241024                  
+0004.00 C/EXEC SQL                                                                                          241024                  
+0005.00 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                                                  241024                  
+0006.00 C+            COMMIT = *NONE                                                                        241024                  
+0007.00 C/END-EXEC                                                                                          241024                  
+0008.00  *                                                                                                  241024                  
+0009.00 C/EXEC SQL                                                                                          241024                  
+0010.00 C+ DECLARE C1 CURSOR FOR SELECT ITMCODE, ITMNAME, INHAND                                            241107                  
+0011.00 C+ FROM MASTER WHERE INHAND < MINQTY                                                                241107                  
+0012.00 C/END-EXEC                                                                                          241106                  
+0013.00  *                                                                                                  241024                  
+0013.01 C/EXEC SQL                                                                                          241107                  
+0013.02 C+ DECLARE C2 CURSOR FOR SELECT MINQTY-INHAND AS DIFFERENCE FROM                                    241107                  
+0013.03 C+ MASTER WHERE INHAND < MINQTY                                                                     241107                  
+0013.04 C/END-EXEC                                                                                          241107                  
+0013.05  *                                                                                                  241107
+0014.00 C/EXEC SQL                                                                                          241024
+0015.00 C+ OPEN C1                                                                                          241024
+0016.00 C/END-EXEC                                                                                          241024
+0016.01  *                                                                                                  241107
+0016.02 C/EXEC SQL                                                                                          241107
+0016.03 C+ OPEN C2                                                                                          241107
+0016.04 C/END-EXEC                                                                                          241107
+0017.00  *                                                                                                  241024
+0017.01 C                   EVAL      DATE = %DATE()                                                        241107
+0017.02 C                   EVAL      TIME12 = %TIME()                                                      241107
+0017.03 C                   WRITE     HEADER1                                                               241026
+0017.04 C                   WRITE     HEADER2                                                               241026
+0017.05 C                   DOW       SQLCOD = 0                                                            241026
+0019.00 C/EXEC SQL                                                                                          241024
+0020.00 C+ FETCH FROM C1 INTO :ITMCODE,:ITMNAME, :INHAND                                                    241107
+0021.00 C/END-EXEC                                                                                          241024
+0021.01 C/EXEC SQL                                                                                          241107
+0021.02 C+ FETCH FROM C2 INTO :DIFFERENCE                                                                   241107
+0021.03 C/END-EXEC                                                                                          241107
+0022.00 C                   If        SqlCod <> 0                                                           241024 
+0023.00 C                   Leave                                                                           241024 
+0024.00 C                   EndIf                                                                           241024 
+0025.01 C                   write     DETAILS                                                               241026 
+0026.00 C                   EndDo                                                                           241024 
+0027.00  *                                                                                                  241024 
+0028.00 C/EXEC SQL                                                                                          241024 
+0029.00 C+ CLOSE C1                                                                                         241024 
+0030.00 C/END-EXEC                                                                                          241024 
+0031.00  *                                                                                                  241024 
+0032.00 C                   Eval      *Inlr = *On                                                           241024 
+        ****************** End of data ****************************************************************************
+
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                          E2 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0001.00 HOPTION(*SRCSTMT)                                                                                   241011                  
+0002.00 FGOODRCVD  O    E           K DISK    PREFIX(P)                                                     241107                  
+0003.00 FSTOCKMASTRUF   E           K DISK    PREFIX(S)                                                     241107                  
+0004.00 FENTRYDSP  CF   E             WORKSTN                                                               241107                  
+0005.00 C                   DOW       (*IN03 = *OFF) AND (*IN12 = *OFF)                                     241011                  
+0006.00 C                   IF        *IN06 = *ON                                                           241017                  
+0007.00 C                   EVAL      PGRN = GRN                                                            241106                  
+0008.00 C                   EVAL      PITMCODE = ITMCODE                                                    241107                  
+0009.00 C                   EVAL      PUSR = USR                                                            241107                  
+0010.00 C                   EVAL      PDAT2 = DAT2                                                          241107                  
+0011.00 C                   EVAL      PTIM2 = TIM2                                                          241107                  
+0012.00 C                   EVAL      PRQSTNO = RQSTNO                                                      241107                  
+0013.00 C                   EVAL      PQTY = QTY                                                            241107                  
+0014.00 C                   EVAL      PPRICE1 = PRICE1                                                      241107                  
+0015.00 C     ITMCODE       CHAIN     STOCKMASTR                                                            241107                  
+0016.00 C                   IF        %FOUND(STOCKMASTR)                                                    241107                  
+0017.00 C                   EVAL      SSTKINHND = SSTKINHND + QTY                                           241107                  
+0018.00 C                   EVAL      SVALUE = SSTKINHND * SPRICE                                           241107                  
+0019.00 C                   UPDATE    RECD                                                                  241107                  
+0020.00 C     'UPDATED'     DSPLY                                                                           241106 
+0021.00 C                   ELSE                                                                            241106 
+0022.00 C     'NOT FOUND'   DSPLY                                                                           241106 
+0023.00 C                   ENDIF                                                                           241106 
+0024.00 C                   WRITE(E)  RCVR                                                                  241107 
+0025.00 C                   ENDIF                                                                           241017 
+0026.00 C                   EVAL      *IN06 = *OFF                                                          241017 
+0027.00 C                   EXFMT     ENTRY2                                                                241106 
+0028.00 C                   ENDDO                                                                           241011 
+0029.00 C                   SETON                                            LR                             241011 
+        ****************** End of data ****************************************************************************
+
+
+ Columns . . . :    1 100                                      Browse                                               ABCD/PRACTICE10
+ SEU==>                                                                                                                   PRT30CALL
+ FMT **  ...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8 ...+... 9 ...+... 0                       
+        *************** Beginning of data ***************************************************************************************  
+0001.00 PGM                                                                                                      241108            
+0002.00 CALL PGM(PRINTER30)                                                                                      241108            
+0003.00 DSPSPLF FILE(R3)                                                                                         241108            
+0004.00 DLTSPLF FILE(R3)                                                                                         241108            
+0005.00 ENDPGM                                                                                                   241108            
+        ****************** End of data ******************************************************************************************  
+                                                                                                                                   
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10
+ SEU==>                                                                                                                  SRPGVAR211
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                            
+        *************** Beginning of data ***************************************************************************************  
+0001.00 H OPTION(*NODEBUGIO : *SRCSTMT) DEBUG(*YES)                                                         241024                 
+0002.00  *                                                                                                  241024                 
+0003.00 FSUBRECIEV1CF   E             WORKSTN SFILE(SFLT:RRN#) INFDS(FILDS)                                 241106                 
+0003.01 F                                         PREFIX(D)                                                 241024                 
+0004.00  *                                                                                                  241024                 
+0004.01 DFD               S               D                                                                 241106                 
+0004.02 DTD               S               D                                                                 241106                 
+0005.00 D RRN#            S              4S 0                                                               241024                 
+0006.00 DFILDS            DS                                                                                241024                 
+0007.00 DRECNO                  378    379I 0                                                               241024                 
+0008.00 C/EXEC SQL                                                                                          241024                 
+0009.00 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                                                  241024                 
+0009.01 C+  COMMIT = *NONE                                                                                  241024                 
+0010.00 C/END-EXEC                                                                                          241024                 
+0011.00  *                                                                                                  241024                 
+0012.00 C                   DOW       *IN03 = *OFF                                                          241106                 
+0013.00 C                   EXSR      DSPSR                                                                 241024                 
+0014.00 C                   ENDDO                                                                           241024                 
+0015.00 C/EXEC SQL                                                                                          241024                 
+0016.00 C+ CLOSE C1                                                                                         241024
+0017.00 C/END-EXEC                                                                                          241024
+0018.00  *                                                                                                  241024
+0019.00 C                   EVAL      *INLR = *ON                                                           241024
+0020.00  *                                                                                                  241024
+0021.00 C     *INZSR        BEGSR                                                                           241024
+0022.00 C                   EVAL      *IN40 = *OFF                                                          241024
+0023.00 C                   EVAL      *IN41 = *OFF                                                          241024
+0024.00 C                   EVAL      *IN42 = *OFF                                                          241024
+0025.00 C                   EVAL      *IN43 = *OFF                                                          241024
+0026.00 C                   EVAL      RRN# = 0                                                              241024
+0027.00 C                   EVAL      DSRECNO = 1                                                           241024
+0028.00  *                                                                                                  241024
+0028.01 C                   EXFMT     ENTRY                                                                 241106
+0029.00 C/EXEC SQL                                                                                          241024
+0030.00 C+ DECLARE C1 CURSOR FOR SELECT RECCODE, "USER", "DATE", REQNO,                                     241106
+0030.01 C+ QTYREC, PRICE FROM RECIEVED WHERE DATE BETWEEN :DFDATE AND :DTDATE                               241106
+0031.00 C/END-EXEC                                                                                          241024
+0032.00  *                                                                                                  241024
+0032.01 C/EXEC SQL                                                                                          241024
+0032.02 C+ OPEN C1                                                                                          241024 
+0032.04 C/END-EXEC                                                                                          241024 
+0033.00 C                   EXSR      CLEARSR                                                               241024 
+0034.00 C                   EXSR      LOADSR                                                                241024 
+0035.00  *                                                                                                  241024 
+0036.00 C                   ENDSR                                                                           241024 
+0037.00  *                                                                                                  241024 
+0038.00 C     CLEARSR       BEGSR                                                                           241024 
+0039.00 C                   EVAL      RRN# = 0                                                              241024 
+0040.00 C                   EVAL      *IN42 = *ON                                                           241024 
+0041.00 C                   WRITE     SFLCT                                                                 241024 
+0042.00 C                   EVAL      *IN42 = *OFF                                                          241024 
+0043.00 C                   ENDSR                                                                           241024 
+0044.00  *                                                                                                  241024 
+0045.00 C     LOADSR        BEGSR                                                                           241024 
+0046.00 C                   EVAL      *IN43 = *OFF                                                          241024 
+0047.00 C/EXEC SQL                                                                                          241024 
+0048.00 C+ FETCH NEXT FROM C1 INTO :DRECCODE, :DUSER, :DDATE, :DREQNO,                                      241106 
+0048.01 C+ :DQTYREC, :DPRICE                                                                                241106 
+0049.00 C/END-EXEC                                                                                          241024 
+0050.00 C                   DOW       SQLCOD = *ZERO                                                        241024 
+0051.00 C                   EVAL      RRN# = RRN# + 1                                                       241024 
+0052.00 C                   IF        RRN# > 9999                                                           241024 
+0053.00 C                   LEAVE                                                                           241024 
+0053.01 C                   ENDIF                                                                           241024 
+0054.00 C                   WRITE     SFLT                                                                  241024 
+0055.00 C/EXEC SQL                                                                                          241024 
+0056.00 C+ FETCH FROM C1 INTO :DRECCODE, :DUSER, :DDATE, :DREQNO, :DQTYREC, :DPRICE                         241106 
+0057.00 C/END-EXEC                                                                                          241024 
+0058.00 C                   ENDDO                                                                           241024 
+0059.00 C                   EVAL      *IN43 = *ON                                                           241024 
+0060.00 C                   ENDSR                                                                           241024 
+0061.00  *                                                                                                  241024 
+0062.00 C     DSPSR         BEGSR                                                                           241024 
+0063.00 C                   EVAL      *IN40 = *ON                                                           241024 
+0064.00 C                   EVAL      *IN41 = *ON                                                           241024 
+0065.00 C                   IF        RRN# < 0                                                              241024 
+0066.00 C                   EVAL      *IN40 = *OFF                                                          241024 
+0067.00 C                   ENDIF                                                                           241024 
+0068.00 C                   WRITE     FOOTER                                                                241024 
+0069.00 C                   EXFMT     SFLCT                                                                 241024 
+0070.00 C                   EVAL      DSRECNO = RECNO                                                       241024 
+0071.00 C                   EVAL      *IN40 = *OFF                                                          241024 
+0072.00 C                   EVAL      *IN41 = *OFF                                                          241106 
+0073.00 C                   ENDSR                                                                           241024 
+        ****************** End of data ****************************************************************************
+
+
+ Columns . . . :    6 100                                      Browse                                               ABCD/PRACTICE10 
+ SEU==>                                                                                                                       ZRPG1 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Comments++++++++++++                             
+        *************** Beginning of data ***************************************************************************************   
+0001.00 H OPTION(*NODEBUGIO : *SRCSTMT) DEBUG(*YES)                                                         241024                  
+0002.00  *                                                                                                  241024                  
+0003.00 FZDSP1     CF   E             WORKSTN SFILE(SFLT:RRN#) INFDS(FILDS)                                 241106                  
+0003.01 F                                         PREFIX(D)                                                 241024                  
+0004.00  *                                                                                                  241024                  
+0004.01 DFD               S               D                                                                 241106                  
+0004.02 DTD               S               D                                                                 241106                  
+0005.00 D RRN#            S              4S 0                                                               241024                  
+0006.00 DFILDS            DS                                                                                241024                  
+0007.00 DRECNO                  378    379I 0                                                               241024                  
+0008.00 C/EXEC SQL                                                                                          241024                  
+0009.00 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                                                  241024                  
+0009.01 C+  COMMIT = *NONE                                                                                  241024                  
+0010.00 C/END-EXEC                                                                                          241024                  
+0011.00  *                                                                                                  241024                  
+0012.00 C                   DOW       *IN03 = *OFF                                                          241106                  
+0013.00 C                   EXSR      DSPSR                                                                 241024                  
+0014.00 C                   ENDDO                                                                           241024                  
+0015.00 C/EXEC SQL                                                                                          241024                  
+0016.00 C+ CLOSE C1                                                                                         241024
+0017.00 C/END-EXEC                                                                                          241024
+0018.00  *                                                                                                  241024
+0019.00 C                   EVAL      *INLR = *ON                                                           241024
+0020.00  *                                                                                                  241024
+0021.00 C     *INZSR        BEGSR                                                                           241024
+0022.00 C                   EVAL      *IN40 = *OFF                                                          241024
+0023.00 C                   EVAL      *IN41 = *OFF                                                          241024
+0024.00 C                   EVAL      *IN42 = *OFF                                                          241024
+0025.00 C                   EVAL      *IN43 = *OFF                                                          241024
+0026.00 C                   EVAL      RRN# = 0                                                              241024
+0027.00 C                   EVAL      DSRECNO = 1                                                           241024
+0028.00  *                                                                                                  241024
+0028.01 C                   EXFMT     ENTRY0                                                                241107
+0028.02 C                   IF        DINPUT = 1                                                            241107
+0028.03 C                   EXFMT     ENTRY                                                                 241106
+0029.00 C/EXEC SQL                                                                                          241024
+0030.00 C+ DECLARE C1 CURSOR FOR SELECT ISSCODE, "USER", "DATE", QNTY FROM                                  241106
+0030.01 C+ ISSUED WHERE DATE BETWEEN :DFDATE AND :DTDATE                                                    241106
+0031.00 C/END-EXEC                                                                                          241024
+0031.01  *                                                                                                  241107 
+0031.02 C/EXEC SQL                                                                                          241107 
+0031.03 C+ OPEN C1                                                                                          241107 
+0031.04 C/END-EXEC                                                                                          241107 
+0031.05  *                                                                                                  241107 
+0031.06 C                   ENDIF                                                                           241107 
+0031.07 C                   IF        DINPUT = 2                                                            241107 
+0031.08 C                   EXFMT     ENTRY2                                                                241106 
+0031.09 C/EXEC SQL                                                                                          241106 
+0031.10 C+ DECLARE C2 CURSOR FOR SELECT ISSCODE, "USER", "DATE", QNTY FROM                                  241107 
+0031.11 C+ ISSUED WHERE ISSCODE = :DCODE                                                                    241106 
+0031.12 C/END-EXEC                                                                                          241106 
+0031.13  *                                                                                                  241107 
+0031.14 C/EXEC SQL                                                                                          241107 
+0031.15 C+ OPEN C2                                                                                          241107 
+0031.16 C/END-EXEC                                                                                          241107 
+0031.17  *                                                                                                  241107 
+0031.18 C                   ENDIF                                                                           241106 
+0032.00  *                                                                                                  241024 
+0033.00 C                   EXSR      CLEARSR                                                               241024 
+0034.00 C                   EXSR      LOADSR                                                                241024 
+0035.00  *                                                                                                  241024 
+0036.00 C                   ENDSR                                                                           241024 
+0037.00  *                                                                                                  241024 
+0038.00 C     CLEARSR       BEGSR                                                                           241024 
+0039.00 C                   EVAL      RRN# = 0                                                              241024 
+0040.00 C                   EVAL      *IN42 = *ON                                                           241024 
+0041.00 C                   WRITE     SFLCT                                                                 241024 
+0042.00 C                   EVAL      *IN42 = *OFF                                                          241024 
+0043.00 C                   ENDSR                                                                           241024 
+0044.00  *                                                                                                  241024 
+0045.00 C     LOADSR        BEGSR                                                                           241024 
+0046.00 C                   EVAL      *IN43 = *OFF                                                          241024 
+0046.01 C                   IF        DINPUT = 1                                                            241107 
+0047.00 C/EXEC SQL                                                                                          241024 
+0048.00 C+ FETCH NEXT FROM C1 INTO :DISSCODE, :DUSER, :DDATE, :DQNTY                                        241106 
+0049.00 C/END-EXEC                                                                                          241024 
+0049.01 C                   ENDIF                                                                           241107 
+0049.02  *                                                                                                  241107 
+0049.03 C                   IF        DINPUT = 2                                                            241107 
+0049.04 C/EXEC SQL                                                                                          241107  
+0049.05 C+ FETCH NEXT FROM C2 INTO :DISSCODE, :DUSER, :DDATE, :DQNTY                                        241107  
+0049.06 C/END-EXEC                                                                                          241107  
+0049.07 C                   ENDIF                                                                           241107  
+0050.00 C                   DOW       SQLCOD = *ZERO                                                        241024  
+0051.00 C                   EVAL      RRN# = RRN# + 1                                                       241024  
+0052.00 C                   IF        RRN# > 9999                                                           241024  
+0053.00 C                   LEAVE                                                                           241024  
+0053.01 C                   ENDIF                                                                           241024  
+0054.00 C                   WRITE     SFLT                                                                  241024  
+0054.01 C                   IF        DINPUT = 1                                                            241107  
+0055.00 C/EXEC SQL                                                                                          241024  
+0056.00 C+ FETCH FROM C1 INTO :DISSCODE, :DUSER, :DDATE, :DQNTY                                             241106  
+0057.00 C/END-EXEC                                                                                          241024  
+0057.01 C                   ENDIF                                                                           241107  
+0057.02  *                                                                                                  241107  
+0057.03 C                   IF        DINPUT = 2                                                            241107  
+0057.04 C/EXEC SQL                                                                                          241107  
+0057.05 C+ FETCH FROM C2 INTO :DISSCODE, :DUSER, :DDATE, :DQNTY                                             241107  
+0057.06 C/END-EXEC                                                                                          241107  
+0057.07 C                   ENDIF                                                                           241107 
+0057.08  *                                                                                                  241107 
+0058.00 C                   ENDDO                                                                           241024 
+0059.00 C                   EVAL      *IN43 = *ON                                                           241024 
+0060.00 C                   ENDSR                                                                           241024 
+0061.00  *                                                                                                  241024 
+0062.00 C     DSPSR         BEGSR                                                                           241024 
+0063.00 C                   EVAL      *IN40 = *ON                                                           241024 
+0064.00 C                   EVAL      *IN41 = *ON                                                           241024 
+0065.00 C                   IF        RRN# < 0                                                              241024 
+0066.00 C                   EVAL      *IN40 = *OFF                                                          241024 
+0067.00 C                   ENDIF                                                                           241024 
+0068.00 C                   WRITE     FOOTER                                                                241024 
+0069.00 C                   EXFMT     SFLCT                                                                 241024 
+0070.00 C                   EVAL      DSRECNO = RECNO                                                       241024 
+0071.00 C                   EVAL      *IN40 = *OFF                                                          241024 
+0072.00 C                   EVAL      *IN41 = *OFF                                                          241106 
+0073.00 C                   ENDSR                                                                           241024 
+        ****************** End of data ****************************************************************************
+
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1
+ SEU==>                                                                                                                     SEQ1PRT
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                
+        *************** Beginning of data ***************************************************************************************  
+0001.00 H OPTION(*NODEBUGIO: *SRCSTMT)                                                  241031                                     
+0002.00 FSEQ1RPTF  O    E             PRINTER                                           241031                                     
+0003.00  *                                                                              241031                                     
+0004.00 DEMPNO            S              5P 0                                           241031                                     
+0005.00 DEMPNAME1         S             20A                                             241031                                     
+0006.00 DADDRESS          S             20A                                             241031                                     
+0007.00  *                                                                              241031                                     
+0008.00 C/EXEC SQL                                                                      241031                                     
+0009.00 C+ SET OPTION CLOSQLCSR = *ENDMOD,                                              241031                                     
+0010.00 C+        COMMIT = *NONE                                                        241031                                     
+0011.00 C/END-EXEC                                                                      241031                                     
+0012.00  *                                                                              241031                                     
+0013.00 C/EXEC SQL                                                                      241031                                     
+0014.00 C+ DECLARE C1 CURSOR FOR                                                        241031                                     
+0014.01 C+ SELECT EMPNO, EMPNAME1, ADDRESS FROM SEQ1                                    241031                                     
+0015.00 C/END-EXEC                                                                      241031                                     
+0016.00  *                                                                              241031                                     
+0017.00 C/EXEC SQL                                                                      241031                                     
+0018.00 C+ OPEN C1                                                                      241031                                     
+0019.00 C/END-EXEC                                                                      241031
+0020.00  *                                                                              241031
+0020.01 C                   DOW       SQLCOD = 0                                        241031
+0021.00 C                   WRITE     HEADER                                            241031
+0022.00  *                                                                              241031
+0023.00 C/EXEC SQL                                                                      241031
+0024.00 C+ FETCH FROM C1 INTO :EMPNO, :EMPNAME1, :ADDRESS                               241031
+0025.00 C/END-EXEC                                                                      241031
+0026.00  *                                                                              241031
+0027.00 C                   IF        SQLCOD <> 0                                       241031
+0028.00 C                   LEAVE                                                       241031
+0029.00 C                   ELSE                                                        241031
+0030.00 C                   WRITE     DETAILS                                           241031
+0031.00 C                   ENDIF                                                       241031
+0032.00  *                                                                              241031
+0032.01 C                   ENDDO                                                       241031
+0033.00 C/EXEC SQL                                                                      241031
+0034.00 C+ CLOSE C1                                                                     241031
+0035.00 C/END-EXEC                                                                      241031
+0036.00 C                   SETON                                        LR             241031
+
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                  REPORTPRT1 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                 
+        *************** Beginning of data ***************************************************************************************   
+0001.00 H  OPTION (*SRCSTMT)                                                            241013                                      
+0002.00 FORDERLF1  IF   E           K DISK                                              241015                                      
+0003.00 FREPORT2   O    E             PRINTER OFLIND(*IN90)                             241013                                      
+0004.00 D COUNT           S              3P 0                                           241013                                      
+0005.00  *                                                                              241009                                      
+0006.00 C                   EVAL      CURDATE = %DATE()                                 241015                                      
+0007.00 C                   EVAL      CURTIME = %TIME()                                 241015                                      
+0008.00 C                   WRITE     HEADER1                                           241015                                      
+0009.00 C                   WRITE     HEADER2                                           241015                                      
+0010.00 C     *LOVAL        SETLL     ORDERLF1                                          241015                                      
+0011.00 C                   READ      ORDERLF1                                          241015                                      
+0012.00 C                   DOW       NOT %EOF()                                        241009                                      
+0013.00 C                   IF        %SUBST(STATUS:1:1) = 'A'                          241015                                      
+0014.00 C                   WRITE     DETAIL                                            241009                                      
+0015.00 C*                  IF        *IN90 = *ON                                       241015                                      
+0016.00 C*                  WRITE     HEADER1                                           241015                                      
+0017.00 C*                  WRITE     HEADER2                                           241015                                      
+0018.00 C*                  ENDIF                                                       241015                                      
+0019.00 C                   EVAL      COUNT = COUNT + 1                                 241009                                      
+0020.00 C                   ENDIF                                                       241013
+0021.00 C                   READ      ORD                                               241015
+0022.00 C                   ENDDO                                                       241009
+0023.00 C                   EVAL      TTLOD = COUNT                                     241013
+0024.00 C                   WRITE     FOOTER                                            241009
+0024.01 C                   EVAL      FLD001 = 'EOR'                                    241015
+0024.02 C                   WRITE     RCD001                                            241015
+0025.00  *                                                                              241009
+0026.00 C                   SETON                                            LR         241009
+        ****************** End of data *******************************************************
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1
+ SEU==>                                                                                                                  ORDERRPGDS
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                
+        *************** Beginning of data ***************************************************************************************  
+0000.01 H OPTION(*NODEBUGIO: *SRCSTMT)                                                  241011                                     
+0001.00 FORDERLF1  IF   E           K DISK                                              241011                                     
+0002.00 FPRACTICED CF   E             WORKSTN                                           241011                                     
+0003.00 C     *LOVAL        SETLL     ORDERLF1                                          241011                                     
+0004.00 C                   DOW       (*IN03 = *OFF) AND (*IN12 = *OFF)                 241011                                     
+0005.00 C                   READ      ORDERLF1                                          241011                                     
+0006.00 C                   IF        %EOF(ORDERLF1)                                    241011                                     
+0007.00 C                   LEAVE                                                       241011                                     
+0008.00 C                   ENDIF                                                       241011                                     
+0008.01 C                   IF        %SUBDT(DATE: *YEARS) = 2024                       241011                                     
+0009.00 C                   EVAL      ORDERNO = ORDERNO                                 241011                                     
+0010.00 C                   EVAL      ORDQTY = ORDQTY                                   241011                                     
+0010.01 C                   EVAL      DESC = DESC                                       241011                                     
+0012.00 C                   EXFMT     DSP                                               241011                                     
+0012.01 C                   ENDIF                                                       241011                                     
+0013.00 C                   ENDDO                                                       241011                                     
+0014.00 C                   SETON                                        LR             241011                                     
+        ****************** End of data ******************************************************************************************  
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                  SRVPGMCRIC 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                 
+        *************** Beginning of data ***************************************************************************************   
+0001.00 H NOMAIN                                                                        241014                                      
+0002.00  *                                                                              241014                                      
+0003.00 D BtAvgSp         PR             8P 2                                           241021                                      
+0004.00 D TRUN                           5P 0                                           241020                                      
+0005.00 D OUTS                           3P 0                                           241020                                      
+0005.01 D BTAVG                          4P 2                                           241020                                      
+0006.00  *                                                                              241012                                      
+0007.00 D BlAvgSp         PR             8P 2                                           241020                                      
+0008.00 D RUN                            5P 0                                           241020                                      
+0009.00 D TWIDE                          3P 0                                           241020                                      
+0009.01 D BLAVG                          4P 2                                           241020                                      
+0010.00  *                                                                              241014                                      
+0011.00 D SnrSp           PR            10A                                             241021                                      
+0012.00 D DATE                            D                                             241020                                      
+0012.01 D SENIORITY                     10A                                             241020                                      
+0013.00  *                                                                              241014                                      
+0014.00  *                                                                              241019                                      
+0015.00 P BtAvgSp         B                   EXPORT                                    241018                                      
+0016.00 D BtAvgSp         PI             8P 2                                           241021                                      
+0017.00 D TRUN                           5P 0                                           241020
+0018.00 D OUTS                           3P 0                                           241020
+0019.00 D BTAVG                          4P 2                                           241020
+0020.00  *                                                                              241012
+0021.00 C                   EVAL      BTAVG = TRUN / OUTS                               241020
+0021.01 C                   RETURN    BTAVG                                             241021
+0022.00 P BtAvgSp         E                                                             241019
+0023.00  *                                                                              241018
+0024.00  *                                                                              241019
+0025.00 P BlAvgSp         B                   EXPORT                                    241018
+0026.00 D BlAvgSp         PI             8P 2                                           241020
+0027.00 D RUN                            5P 0                                           241020
+0028.00 D TWIDE                          3P 0                                           241020
+0029.00 D BLAVG                          4P 2                                           241020
+0030.00  *                                                                              241014
+0031.00 C                   EVAL      BLAVG = RUN / TWIDE                               241020
+0031.01 C                   RETURN    BLAVG                                             241020
+0032.00 P BlAvgSp         E                                                             241019
+0033.00  *                                                                              241019
+0034.00  *                                                                              241019
+0035.00 P SnrSp           B                   EXPORT                                    241018
+0036.00 D SnrSp           PI            10A                                             241021
+0037.00 D DATE                            D                                             241020
+0037.01 DSENIORITY                      10A                                             241020
+0038.00 D CURDT           S               D                                             241018
+0039.00 D DATEDIFF        S              5  0                                           241019
+0040.00  *                                                                              241014
+0041.00 C                   EVAL      CURDT = %DATE()                                   241018
+0042.00 C                   EVAL      DATEDIFF = %DIFF(CURDT:DATE:*YEARS)               241021
+0042.01 C                   SELECT                                                      241020
+0042.02 C                   WHEN      DATEDIFF >= 20                                    241020
+0042.03 C                   EVAL      SENIORITY = 'SENIOR'                              241020
+0042.04 C                   WHEN      DATEDIFF > 10 AND DATEDIFF <= 20                  241020
+0042.05 C                   EVAL      SENIORITY = 'MID'                                 241020
+0042.06 C                   WHEN      DATEDIFF > 5 AND DATEDIFF <= 10                   241020
+0042.07 C                   EVAL      SENIORITY = 'JUNIOR'                              241020
+0042.08 C                   WHEN      DATEDIFF > 5 AND DATEDIFF <= 10                   241020
+0042.09 C                   EVAL      SENIORITY = 'ENTRY'                               241020
+0042.10 C                   ENDSL                                                       241020
+0042.11 C                   RETURN    SENIORITY                                         241021
+0043.00 P SnrSp           E                                                             241019 
+0044.00  *                                                                              241014 
+0045.00  *                                                                              241019 
+        ****************** End of data ********************************************************
+
+
+
+ Columns . . . :    1  80                                      Browse                                                ABCD/PRACTICE1
+ SEU==>                                                                                                                        BL18
+ FMT **  ...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8                                           
+        *************** Beginning of data ***************************************************************************************  
+0001.00              STRPGMEXP  PGMLVL(*CURRENT)                                             241014                                
+0002.00              EXPORT     SYMBOL('BTAVGSP')                                            241019                                
+0003.00              EXPORT     SYMBOL('BLAVGSP')                                            241019                                
+0004.00              EXPORT     SYMBOL('SNRSP')                                              241019                                
+0005.00              ENDPGMEXP                                                               241014                                
+        ****************** End of data ******************************************************************************************  
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1
+ SEU==>                                                                                                                     ASSGN24
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                
+        *************** Beginning of data ***************************************************************************************  
+0002.00 HOPTION(*NODEBUGIO:*SRCSTMT)                                                    241024                                     
+0003.01 DDAREA           SDS                                                            241024                                     
+0004.00 DPGMNAME                  1     10A                                             241024                                     
+0005.00 DPGMSTS                  11     15S 0                                           241023                                     
+0006.00 DPGMPRVSTS               16     20S 0                                           241024                                     
+0007.00 DPGMMSRCSTMT             21     28A                                             241024                                     
+0007.01 DPGMROUTINE              29     36A                                             241024                                     
+0007.02 DPGMPARMS                37     39S 0                                           241024                                     
+0007.03 DPGMMSGID                40     46A                                             241024                                     
+0008.00 DOLD              S             50A                                             241024                                     
+0009.00 DNEW              S             50A                                             241024                                     
+0009.01 C     *DTAARA       DEFINE                  DAREA            50                 241024                                     
+0009.02 C     *LOCK         IN        DAREA                                             241024                                     
+0009.03 C                   MOVEL     DAREA         OLD              50                 241024                                     
+0009.04 C                   DSPLY                   OLD                                 241024                                     
+0009.07 C                   EVAL      NEW = 'HELLO WORLD'                               241024                                     
+0009.08 C                   MOVEL     NEW           DAREA            50                 241024                                     
+0009.09 C                   OUT       DAREA                                             241024                                     
+0009.10 C                   UNLOCK    DAREA                                             241024                                     
+0009.11 C     'NEW AREA IS 'DSPLY                                                       241024
+0009.12 C     TAG1          TAG                                                         241024
+0012.00 C                   SETON                                            LR         241023
+0013.00 C     *PSSR         BEGSR                                                       241024
+0014.00 C     'ERROR IN PGM'DSPLY                   PGMNAME                             241024
+0015.00 C     'PRGM STS'    DSPLY                   PGMSTS                              241024
+0016.00 C     'MSGID'       DSPLY                   PGMMSGID                            241024
+0017.00 C     'SOURCE'      DSPLY                   PGMPARMS                            241024
+0018.01 C                   GOTO      TAG1                                              241024
+0019.00 C                   ENDSR                                                       241024
+        ****************** End of data *******************************************************
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                    ASSGN25M 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                 
+        *************** Beginning of data ***************************************************************************************   
+0000.01 HOPTION(*NODEBUGIO: *SRCSTMT)                                                   241025                                      
+0000.02 FSEQ1      IF   E           K DISK                                              241025                                      
+0000.04 D TOTALSp         PR             8P 0                                           241025                                      
+0000.05 DARR1                            3A   DIM(100)                                  241025                                      
+0000.07 D*NUMB                           2P 0                                           241025                                      
+0000.08 DARR1             S              3A   DIM(100)                                  241025                                      
+0000.09 D COUNT           S              2P 0                                           241025                                      
+0000.10 D I               S              3P 0 INZ(1)                                    241025                                      
+0001.00 C                   READ      SEQ1                                              241024                                      
+0002.00 C                   DOW       NOT %EOF()                                        241024                                      
+0003.00 C                   EVAL      ARR1(I) = %CHAR(EMPNO)                            241025                                      
+0004.00 C                   EVAL      I = I + 1                                         241025                                      
+0004.01 C                   READ      SEQ1                                              241025                                      
+0005.00 C                   ENDDO                                                       241025                                      
+0006.00 C                   EVAL      COUNT = TOTALSP(ARR1)                             241025                                      
+0007.00 C     'COUNT IS '   DSPLY                   COUNT                               241025                                      
+0007.01  *                                                                              241025                                      
+0008.00 C     *DTAARA       DEFINE                  DAREA            50                 241025                                      
+0009.00 C     *LOCK         IN        DAREA                                             241025                                      
+0010.00 C                   MOVE      COUNT         DAREA            50                 241025
+0014.00 C                   OUT       DAREA                                             241025
+0015.00 C                   UNLOCK    DAREA                                             241025
+0016.00 C                   SETON                                        LR             241025
+        ****************** End of data *******************************************************
+
+
+ Columns . . . :    1  80                                      Browse                                                ABCD/PRACTICE1
+ SEU==>                                                                                                                    ASSIGN19
+ FMT H  .....HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                           
+        *************** Beginning of data ***************************************************************************************  
+0001.00      HOPTION(*SRCSTMT:*NODEBUGIO)                                                    241017                                
+0002.00      D ARRWT           S              2P 0 DIM(10) CTDATA PERRCD(1)                  241018                                
+0003.00      D ARRNM           S             10A   DIM(10) CTDATA PERRCD(1)                  241018                                
+0004.00      D TTLWT           S              3P 0                                           241018                                
+0005.00      D TTLNM           S              2P 0                                           241018                                
+0008.00      C                   EVAL       TTLWT = %XFOOT(ARRWT)                            241017                                
+0009.00      C     TTLWT         DSPLY                                                       241018                                
+0011.00      C                   IF        TTLWT > 500                                       241018                                
+0012.00      C     'LFT WT OVRLD'DSPLY                                                       241018                                
+0013.00      C                   ENDIF                                                       241018                                
+0015.00      C                   EVAL       TTLNM = %ELEM(ARRNM)                             241018                                
+0016.00      C     TTLNM         DSPLY                                                       241018                                
+0017.00      C                   IF        TTLNM > 5                                         241018                                
+0018.00      C     'LFT NM OVRLD'DSPLY                                                       241018                                
+0019.00      C                   ENDIF                                                       241017                                
+0021.00      C                   SETON                                            LR         241017                                
+0022.00 ** CTDATA ARRWT                                                                      241018                                
+0024.00    53                                                                                241018                                
+0025.00    63                                                                                241018                                
+0026.00    73                                                                                241018 
+0027.00    83                                                                                241018 
+0028.00    33                                                                                241018 
+0029.00    55                                                                                241018 
+0030.00    63                                                                                241018 
+0031.00    40                                                                                241018 
+0032.00    49                                                                                241018 
+0033.00    44                                                                                241018 
+0034.00 ** CTDATA ARRNM                                                                      241018 
+0035.00    ADITHYA                                                                           241018 
+0036.00    SAL                                                                               241018 
+0037.00    TARUN                                                                             241018 
+0038.00    PAL                                                                               241018 
+0039.00    AHMED                                                                             241018 
+0040.00    BEN                                                                               241018 
+0041.00    SAM                                                                               241018 
+0042.00    ALTMAN                                                                            241018 
+0043.00    BOB                                                                               241018 
+0044.00    SAMSON                                                                            241018 
+        ****************** End of data *************************************************************
+
+
+ Columns . . . :    1  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                   ASSMNTQRY 
+ FMT **  ...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8                                            
+        *************** Beginning of data ***************************************************************************************   
+0001.00      PGM                                                                             241007                                 
+0002.00              DCLF       FILE(REC1) OPNID(U4)                                         241011                                 
+0002.01              DCL        VAR(&SA) TYPE(*DEC) LEN(6 0)                                 241008                                 
+0002.02              DCL        VAR(&DP) TYPE(*CHAR) LEN(10)                                 241008                                 
+0004.00          DCL VAR(&SPACE) TYPE(*CHAR) LEN(3) VALUE('   ')                             241007                                 
+0005.00          DCL VAR(&NAMES) TYPE(*CHAR) LEN(49)                                         241007                                 
+0006.00              DCL        VAR(&POS) TYPE(*INT) VALUE(1)                                241009                                 
+0009.01              OVRDBF     FILE(REC1) SHARE(*YES)                                       241011                                 
+0009.02              MONMSG MSGID(CPF0000)                                                   241010                                 
+0009.03              CHGDTAARA DTAARA(ABCD/SAL10NAME *ALL) VALUE('   ')                      241010                                 
+0010.00              OPNQRYF    FILE((REC1)) OPTION(*INP) QRYSLT('SALARY *GT +               241011                                 
+0010.01                           10000 *AND DEPARTMENT = "PAYROLL"') +                      241011                                 
+0010.02                           KEYFLD(*NONE) OPNID(U4) COMMIT(*YES)                       241011                                 
+0012.00              RCVF       OPNID(U4)                                                    241011                                 
+0012.01     READLOOP:                                                                        241010                                 
+0013.00          MONMSG MSGID(CPF0864) EXEC(GOTO ENDLOOP)                                    241009                                 
+0023.00                    CHGDTAARA DTAARA(ABCD/SAL10NAME (&POS 10)) VALUE(&U4_NAME)        241011                                 
+0023.01                    CHGVAR VAR(&POS) VALUE(&POS +13)                                  241009                                 
+0024.00                    GOTO READLOOP                                                     241009                                 
+0026.00                    ENDLOOP:                                                          241009
+0028.00                    DSPDTAARA DTAARA(ABCD/SAL10NAME)                                  241009
+0028.01              DLTOVR     FILE(REC1)                                                   241011
+0028.02                    CLOF OPNID(U4)                                                    241011
+0029.00                    ENDPGM                                                            241007
+        ****************** End of data ************************************************************
+
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                     ASSGN15 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                 
+        *************** Beginning of data ***************************************************************************************   
+0000.01 HOPTION(*NODEBUGIO: *SRCSTMT) DEBUG(*YES)                                       241015                                      
+0001.00 FEMPLY     UF   E           K DISK     PREFIX(P)                                241015                                      
+0002.00 FSCREEN1   CF   E             WORKSTN                                           241015                                      
+0003.00  *  DEMPID            S              2S 0                                       241015                                      
+0004.01  *                                                                              241015                                      
+0004.02 C                   DOW       (*IN03 = *OFF) AND (*IN12 = *OFF)                 241015                                      
+0004.03 C     *LOVAL        SETLL     EMPLY                                             241015                                      
+0004.04 C                   EXFMT     RECORD10                                          241015                                      
+0006.00 C     EMPID         CHAIN     EMPLY                                             241015                                      
+0006.01 C*                  IF        %FOUND(EMPLY)      ***NOT NEEDED***               241015                                      
+0006.03 C                   EVAL      EMPNAME = PEMPNAME                                241015                                      
+0006.04 C                   EXFMT     RECORD10                                          241015                                      
+0006.05 C                   EVAL      PEMPNAME = EMPNAME                                241027                                      
+0006.06 C                   UPDATE    EMPLOYEER                                         241027                                      
+0006.07 C*                  ENDIF        ***NOT NEEDED***                               241015                                      
+0009.01 C                   ENDDO                                                       241015                                      
+0011.00 C                   SETON                                        LR             241015                                      
+        ****************** End of data ******************************************************************************************   
+
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                     ASSGN17 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                 
+        *************** Beginning of data ***************************************************************************************   
+0000.01 HOPTION(*NODEBUGIO: *SRCSTMT) DEBUG(*YES)                                       241015                                      
+0001.00 FSEQ1      O    E           K DISK     PREFIX(P)                                241017                                      
+0002.00 FSCREEN2   CF   E             WORKSTN                                           241017                                      
+0003.00  *  DEMPID            S              2S 0                                       241015                                      
+0004.01  *                                                                              241015                                      
+0004.02 C                   EXFMT     RECORD10                                          241017                                      
+0004.03 C                   DOW       *IN03 = *OFF                                      241017                                      
+0004.04 C                   IF        *IN06 = *ON                                       241017                                      
+0004.05 C*                  READ      SEQ1                                              241017                                      
+0004.06 C                   EVAL      PEMPNO = EMPNO                                    241017                                      
+0004.07 C                   EVAL      PEMPNAME1 = EMPNAME1                              241017                                      
+0004.08 C                   EVAL      PADDRESS = ADDRESS                                241017                                      
+0004.09 C                   WRITE(E)  SEQREC1                                           241017                                      
+0004.10 C                   IF        %ERROR                                            241017                                      
+0004.11 C     'ERROR'       DSPLY                                                       241017                                      
+0004.12 C                   LEAVE                                                       241017                                      
+0004.13 C                   ELSE                                                        241017                                      
+0004.14 C     'SUCCES'      DSPLY                                                       241017                                      
+0004.15 C                   ENDIF                                                       241017                                      
+0004.16 C                   ENDIF                                                       241017 
+0004.17 C*                  CLEAR                   RECORD                              241017 
+0004.18 C                   EVAL      *IN06 = *OFF                                      241017 
+0004.19 C                   EXFMT     RECORD10                                          241015 
+0005.00 C                   ENDDO                                                       241017 
+0006.00 C                   SETON                                        LR             241017 
+        ****************** End of data ********************************************************
+
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1
+ SEU==>                                                                                                                      CRTMOD
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                
+        *************** Beginning of data ***************************************************************************************  
+0001.00 H OPTION(*NODEBUGIO: *SRCSTMT) DEBUG(*YES)                                      241014                                     
+0001.01 FCRICPF    IF   E           K DISK                                              241020                                     
+0002.00 D BTAVGSP         PR             8P 2                                           241021                                     
+0003.00 D TRUN                           5  0                                           241020                                     
+0004.00 D OUTS                           3  0                                           241020                                     
+0005.00 D BTAVG                          4  2                                           241020                                     
+0006.00 D BLAVGSP         PR             8P 2                                           241021                                     
+0007.00 D RUN                            5  0                                           241020                                     
+0008.00 D TWIDE                          3  0                                           241020                                     
+0009.00 D BLAVG                          4  2                                           241020                                     
+0010.00 D SNRSP           PR            10A                                             241021                                     
+0011.00 D DATE                            D                                             241020                                     
+0012.00 D SENIORITY                     10A                                             241019                                     
+0014.00  *                                                                              241014                                     
+0015.00 D TRUN            S              5  0                                           241020                                     
+0016.00 D OUTS            S              3  0                                           241020                                     
+0017.00 D BTAVG           S              4  2                                           241020                                     
+0018.00 D RUN             S              5  0                                           241020                                     
+0018.01 D TWIDE           S              3  0                                           241020                                     
+0018.02 D BLAVG           S              4  2                                           241020
+0018.03 D DATE            S               D                                             241020
+0018.04 D SENIORITY       S             10A                                             241019
+0018.05 DPLNAME           S             10A                                             241021
+0019.00  *                                                                              241014
+0019.01 C     'ENTER PLNO: 'DSPLY                   PLNO                                241020
+0020.00 C     PLNO          CHAIN     CRICPF                                            241019
+0021.00 C                   IF        %FOUND()                                          241020
+0022.00 C                   EVAL      BTAVG = BTAVGSP(TRUN:OUTS:BTAVG)                  241020
+0023.00 C                   DSPLY                   BTAVG                               241021
+0024.00 C                   EVAL      BLAVG = BLAVGSP(RUN:TWIDE:BLAVG)                  241020
+0025.00 C                   DSPLY                   BLAVG                               241021
+0026.00 C                   EVAL      SENIORITY = SNRSP(DATE:SENIORITY)                 241020
+0026.01 C                   DSPLY                   SENIORITY                           241021
+0026.02 C                   IF        BTAVG > 30                                        241021
+0026.03 C                   DSPLY                   PLNAME                              241021
+0026.04 C     'IS BATSMAN &'DSPLY     SENIORITY                                         241021
+0026.05 C                   ELSEIF    BTAVG < 10                                        241021
+0026.06 C                   DSPLY                   PLNAME                              241021
+0026.07 C     'IS BOWLER'   DSPLY     SENIORITY                                         241021
+0026.08 C                   ELSEIF    BTAVG > 30                                        241021
+0026.09 C                   DSPLY                   PLNAME                              241021
+0026.10 C     'IS ALLROUNDR'DSPLY     SENIORITY                                         241021
+0026.11 C                   ENDIF                                                       241021
+0032.02 C                   ENDIF                                                       241019
+0033.00 C                   SETON                                        LR             241019
+        ****************** End of data *******************************************************
+
+
+
+ Columns . . . :    1  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                     ECTRACT 
+ FMT **  ...+... 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8                                            
+        *************** Beginning of data ***************************************************************************************   
+0001.00 PGM                                                                                  241003                                 
+0002.00           DCL  VAR(&LOOP) TYPE(*LGL) VALUE('1')                                      241003                                 
+0003.00           DCLF FILE(SEQ1) OPNID(A)                                                   241003                                 
+0004.00           DCLF FILE(NEWSCREEN)                                                       241003                                 
+0005.00           DOWHILE COND(&IN03 *EQ '0')                                                241003                                 
+0006.00             IF COND(&IN12 *EQ '1') THEN(LEAVE)                                       241003                                 
+0007.00                RCVF OPNID(A)                                                         241003                                 
+0008.00                MONMSG MSGID(CPF0864) EXEC(LEAVE)                                     241003                                 
+0009.00                CHGVAR VAR(&EEMPNO) VALUE(&A_EMPNO)                                   241003                                 
+0010.00                CHGVAR VAR(&ENAME) VALUE(&A_EMPNAME1)                                 241003                                 
+0011.00                CHGVAR VAR(&EADD) VALUE(&A_ADDRESS)                                   241003                                 
+0012.00                SNDRCVF RCDFMT(REC1)                                                  241003                                 
+0013.00              ENDDO                                                                   241003                                 
+0014.00 ENDPGM                                                                               241003                                 
+        ****************** End of data ******************************************************************************************   
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                      OCT25M 
+ FMT H  HKeywords++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++                                                 
+        *************** Beginning of data ***************************************************************************************   
+0001.00 HOPTION(*NODEBUGIO:*SRCSTMT)                                                    241024                                      
+0002.00 FSEQ1      IF   E           K DISK                                              241024                                      
+0003.00 DARR              S             50A   DIM(100)                                  241024                                      
+0004.00 DCOUNT            S              2P 0                                           241024                                      
+0005.00 DINDEX            S              3  0 INZ(1)                                    241024                                      
+0005.01 DNEW              S             10A                                             241025                                      
+0006.00 DEMPCOUNT         PR             2P 0                                           241024                                      
+0007.00 DARR                            50A   DIM(100)                                  241024                                      
+0008.00 C     *START        SETLL     SEQ1                                              241024                                      
+0009.00 C                   READ      SEQ1                                              241024                                      
+0010.00 C                   DOW       NOT %EOF(SEQ1)                                    241024                                      
+0011.00 C                   EVAL      ARR(INDEX) =%CHAR(EMPNO)                          241024                                      
+0012.00 C                   EVAL      INDEX = INDEX + 1                                 241024                                      
+0013.00 C                   READ      SEQ1                                              241024                                      
+0014.00 C                   ENDDO                                                       241024                                      
+0015.00 C                   EVAL      COUNT = EMPCOUNT(ARR)                             241024                                      
+0016.00 C     'TOTAL COUNT' DSPLY                   COUNT                               241024                                      
+0016.01 C     *DTAARA       DEFINE                  MYDATA          100                 241025                                      
+0016.02 C     *LOCK         IN        MYDATA                                            241025                                      
+0016.03 C                   EVAL      NEW = %CHAR(COUNT)                                241025 
+0016.04 C                   MOVEL     NEW           MYDATA                              241025 
+0016.05 C                   OUT       MYDATA                                            241025 
+0016.06 C                   UNLOCK    MYDATA                                            241025 
+0017.00 C                   SETON                                            LR         241024 
+        ****************** End of data ********************************************************
+
+
+ Columns . . . :    6  80                                      Browse                                                ABCD/PRACTICE1 
+ SEU==>                                                                                                                      OCT25S 
+ FMT *   *. 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8                                                 
+        *************** Beginning of data ***************************************************************************************   
+0001.00                                                                                 241024                                      
+0002.00 HNOMAIN                                                                         241024                                      
+0003.00 DEMPCOUNT         PR             2P 0                                           241024                                      
+0004.00 DARR                            50A   DIM(100)                                  241024                                      
+0004.01 PEMPCOUNT         B                   EXPORT                                    241024                                      
+0006.00 DEMPCOUNT         PI             2P 0                                           241024                                      
+0007.00 DARR                            50A   DIM(100)                                  241024                                      
+0008.00 DC                S              2P 0 INZ(0)                                    241024                                      
+0009.00 DI                S              3  0 INZ(1)                                    241024                                      
+0010.00 C                   FOR       I = 1 TO 100                                      241024                                      
+0011.00 C                   IF        %TRIM(ARR(I)) <> *BLANKS                          241024                                      
+0012.00 C                   EVAL      C = C + 1                                         241024                                      
+0013.00 C                   ENDIF                                                       241024                                      
+0014.00 C                   ENDFOR                                                      241024                                      
+0015.00 C                   RETURN    C                                                 241024                                      
+0016.00 PEMPCOUNT         E                                                             241024                                      
+        ****************** End of data ******************************************************************************************   
+
+
+
+ 

@@ -1,0 +1,238 @@
+BINDING LANGUAGE:
+
+RTVBNDSRC => TO CREATE BINDING LANGUAGE PROGRAM	SHORTCUT
+
+CRTSRVPGM =>
+
+UPDSRVPGM => TO CHANGES THE SUBPROCEDURES LIKE ADDING AND REMOVING PARAMETERS
+
+DSPSRVPGM => 
+
+BINDING BY COPY : MODULES WITH OTHER MODULES  ==> BINDING MORE THAN ONE MODULE	
+BINDING BY REFERRENCE: SERVICE PGM WITH MODULES => normal CRTPF
+
+
+BINDING DIRECTORY : HOLD THE NAME OF SERVICE PROGRAM & MODULES
+DOES NOT CHECK OBJECTS
+HOLD NAME OF OTHER BND DIRECTORY
+
+CRTBNDDIR => (ON FILE NAME BDIRECT)
+RPGVAR82 SERVICE PROGRAM
+RPGVAR83 MODULE
+USE DUPPROC WHEN YOU ARE DOING BINDING FOR A SECOND TIME
+
+
+WRKBNDDIR => TO CHANGE UPDATE DELETE
+
+H Spec, keyword called BNDDIR('NAME')
+OBJECTS OF ENTRIES NEEDNOT BE THERE
+
+OPTIONS: *DUPPROC OR *DUPVAR
+
+
+WRKBINDDIR => F4 =>
+ 
+
+****************************************************
+
+ACTIVATION GROUP
+
+TYPE : *NEW *CALLER *NAMED *DEFACTGRP
+
+
+ACTGRP CAN BE USED IN  
+
+IN H Spec  ACTGRP(' ') DEFACTGRP(*NO)
+
+SHIFT+ESCAP AND THEN 18 TO SEE ACTIVATION GROUP	
+IT GETS DELETED AFTER JOB IS COMPLETED OR L0GOFF
+
+
+RCLACTGRP => TO DELETE A NAMED ACTIVATION GROUP
+
+
+				SFLPAG(0010)
+	SRECNO		4S  OH	SFLRCDNBR
+
+
+IF THERE IS NO KEY FIELD INSTEAD OF *LOVAL USE *START
+
+'QSNDDTAQ'
+'QRCVDTAQ'
+
+WINDOW:(QRPGLESRC, WINDOWED, "WINW")
+2, 10, 15 ,40, Y, Y
+
+
+
+*********SQL*******8
+
+INSERT INTO ABCD/UPDATE (__FIELD NAME UNTIL LAST PF__)
+SELECT ORDNO, ORDNAME, ETC FROM ABCD/PREVIOUSPF
+
+
+STRRLU => TO CREATE PRTF FILE
+
+
+********DEBUG***********
+
+SHIFT F1 => WORK IWTH BREAK POINT
+
+F12 => RESUME THE DEBUG AND JUMP THE BREAK POINT
+
+F10 => MOVE AHEAD WUTH THE STEPS
+LIN EIS WHITE MEANS = BEING EXECUTED
+
+
+CHANGE TO *SOURCE WHILE USING 14
+STRDBG F4
+TWO TIMES *YES
+APPLY BREAK POINT 
+GO OUT 
+CALL PROGRAM
+
+
+
+******** IN Data structure ****
+use Qualifiers inside DS declaration 
+to use DS.SUBFIELD
+
+
+DFILEFBK          DS
+D FILE              *FILE                                                  * File name
+D OPEN_IND                9      9N                                        * File open?
+D EOF_IND                10     10N                                        * File at eof?
+D STATUS            *STATUS                                                * Status code
+D OPCODE            *OPCODE                                                * Last opcode
+D ROUTINE           *ROUTINE                                               * RPG Routine
+D LIST_NUM               30     37                                         * Listing line
+D SPCL_STAT              38     42S 0                                      * SPECIAL status
+D RECORD            *RECORD                                                * Record name
+D MSGID                  46     52                                         * Error MSGID
+D SCREEN            *SIZE                                                  * Screen size
+D NLS_IN            *INP                                                   * NLS Input?
+D NLS_OUT           *OUT                                                   * NLS Output?
+D NLS_MODE          *MODE           
+ 
+ 
+P = PRINTER; D = DISK; W = WORKSTN; SP = SPECIAL; SQ = Sequential
+Code
+Device1
+RC2
+Condition
+01011	W,D,SQ	n/a	Undefined record type (input record does not match record identifying indicator).
+01012	D	n/a	The number of keys is not valid for %KDS.
+01021	W,D,SQ	n/a	Tried to write a record that already exists (file being used has unique keys and key is duplicate, or attempted to write duplicate relative record number to a subfile).
+01022	D	n/a	Referential constraint error detected on file member.
+01023	D,SQ	n/a	Error in trigger program before file operation performed.
+01024	D,SQ	n/a	Error in trigger program after file operation performed.
+01031	W,D,SQ	n/a	Match field out of sequence.
+01041	n/a	n/a	Array/table load sequence error.
+01042	n/a	n/a	Array/table load sequence error. Alternate collating sequence used.
+01051	n/a	n/a	Excess entries in array/table file.
+01061	n/a	n/a	Error handling for an associated variable for a file parameter
+01071	W,D,SQ	n/a	Numeric sequence error.
+011214	W	n/a	No indicator on the DDS keyword for Print key.
+011224	W	n/a	No indicator on the DDS keyword for Roll Up key.
+011234	W	n/a	No indicator on the DDS keyword for Roll Down key.
+011244	W	n/a	No indicator on the DDS keyword for Clear key.
+011254	W	n/a	No indicator on the DDS keyword for Help key.
+011264	W	n/a	No indicator on the DDS keyword for Home key.
+01201	W	34xx	Record mismatch detected on input.
+01211	all	n/a	I/O operation to a closed file.
+01215	all	n/a	OPEN issued to a file already opened.
+012163	all	yes	Error on an implicit OPEN/CLOSE operation.
+012173	all	yes	Error on an explicit OPEN/CLOSE operation.
+01218	D,SQ	n/a	Record already locked.
+01221	D,SQ	n/a	Update operation attempted without a prior read.
+01222	D,SQ	n/a	Record cannot be allocated due to referential constraint error
+01231	SP	n/a	Error on SPECIAL file.
+01235	P	n/a	Error in PRTCTL space or skip entries.
+01241	D,SQ	n/a	Record number not found. (Record number specified in record address file is not present in file being processed.)
+01251	W	80xx 81xx	Permanent I/O error occurred.
+01255	W	82xx 83xx	Session or device error occurred. Recovery may be possible.
+01261	W	n/a	Attempt to exceed maximum number of acquired devices.
+01271	W	n/a	Attempt to acquire unavailable device
+01281	W	n/a	Operation to unacquired device.
+01282	W	0309	Job ending with controlled option.
+01284	W	n/a	Unable to acquire second device for single device file
+01285	W	0800	Attempt to acquire a device already acquired.
+01286	W	n/a	Attempt to open shared file with SAVDS or IND options.
+01287	W	n/a	Response indicators overlap IND indicators.
+01299	W,D,SQ	yes	Other I/O error detected.
+01331	W	0310	Wait time exceeded for READ from WORKSTN file.
+
+has context menu
+
+
+
+TO GO INSIDE CALL PROGRSM => SHIFT F10 IN DEBUG
+
+*********** IMPORTANT ****888888
+H OPTION(*SRCSTMT: NOB)
+
+
+WHILE GIVING ALL PROGRAM SHOULD HAVE *SOURCE WHILE GIVING 14 AND 15
+TO get output in PR AND PI SHOULD HAVE A VARIABLE LENGTH DATA TYPE
+SHIFT F10 TO GO INSIDE THE SERVICE PROGRAM
+
+SHIFT F9 TO GO TO COMMAND LINE 
+TO SEARCH ONLY INSIDE ' DS ' SPACE SHOULD BE THERE
+
+
+FOR FLATFILE FOR PRERUN INPUT CRTPF INPUT RECORD LENGTH
+FIELD NAME IS SAME AS FLAT FILE NAME
+
+
+F FLAT    IT  F     5    DISK
+D PRE_RUN    S      5       DIM(5)       FROMFILE(FLAT)   PERRCD(1)
+
+
+EVAL    %LOOOKUP('NAME':ARRAY)
+
+
+TO DELETE A ENTRY FROM STRDFU USE SHIFT F11 TWO TIMES
+
+RPGVAR38 ==> HAS PGM TO FIND A SPECIFIC RRN IN A PF
+
+
+SEQUENCE OF BINDING
+
+CREATE A SOURCE OF SERVICE PROGRAM
+CREATE A MODULE FOR THAT
+CREATE A BINDER LANGUAGE
+CRTSRVPGM (GIVE MODULE AND GIVE BINDER LANGUAGE NAME ELSE *ALL)
+CREATE SOURCE OF MAIN MODULE DO 15
+CRTPGM (TO BIND)(MAIN MODULE NAME , SERVICE PROGRAM NAME, ENTRY PROGRAM = MAIN MODULE
+CALL THE PGM
+
+UPDSRVPGM TO CHANGE THE PAFAMETERS IN SERVICE PROGRAM
+DSPSRVPGM => TO DISPLAY SIGNATURE OF SRV PGM
+STRPGMEXP => TO GIVE USER DEFINIED SIGNATURE
+
+
+*********ACTIVATION GROUP **********==> IMPROVES PERFORMANCE OF PROGRAM
+
+NEW   =  EVERY TIME A NEW ACTIVATION GROUP  
+CALLER = ACTIVATION GROUP CALLED WILL DIRECTLY CALLED INTO CALLING WILL HAVE AUTOMATICALLY INTO CALLED
+NAMED  = RCLACTGRP TO DELETE NAMED 
+DFTACTGRP
+
+(SHIFT ESCAP) 3 18
+  WORKJOB
+ 
+CALLB => USED TO CALL MODULE FROM ONE MODULE TO ANOTHER
+
+BIND BY COPY => MODULE WITH MODULE
+
+CALLB(E)    'RPGVAR'    PLIST
+IF        %ERROR()
+
+
+
+crtbnddir => wrkbindir => 9 =>1 to add you can add modules and modules
+after creating binding directory use crtpgm to bind binding direstory name also 
+** add one module entry to create properly
+
+UPDSRVPGM TO change parameter inside service program
+dspsrvpgm f4 => to see signature after reaching bottom presss enter

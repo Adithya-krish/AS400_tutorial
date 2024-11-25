@@ -1,0 +1,407 @@
+***********  embedded SQL **********
+
+source type is SQLRPGLE
+
+In c spec all queries are mentioned
+
+
+compile directives are /EXECSQL and /END-EXEC
+
+EXAMPLE:
+C/EXECSQL
+C+ SELECT COUNT(*) FROM SEQ1
+C/END-EXEC
+			
+
+	                   sql works first    other line gets executed
+COMPILATION has two steps: precompilation and compilation
+done by    		   precompiler     &   compiltor
+
+HOST VARIABLE:
+
+
+/EXEC SQL
+C+ SELECT * FROM SEQ1 WHERE EMPNO = :TEMPNO
+/END-EXEC
+C EVAL TEMPNO = 20
+
+SEQ1 DO NOT NEED TO BE DEFINIED INSIDE SQL
+
+==> WHILE UPDATING COMMITMENT SHOULD BE *  (INSERT UPDATE DELETE)       *******************
+
+
+/EXEC SQL
+c+ SET OPTION COMMIT  = *NONE
+/END-EXEC
+
+
+
+SELECT empno, sum(empsal) as sum
+
+SQLCA TO HANDLE ERROR
+MAINLY CHECK SQLCODE TO SEE IF THERE IS ANY PROBLEM
+SQLSTATE
+SQLEDDS
+
+SQLER3 ==> SHOWS HOW MANY ELEMENTS ARE UPDATED DELETED OR LAST FETCHED
+
+PROGRAM STATUS AND FILE INFORMATION DATA STRUCTURES IN RPGLE
+
+
+FOR UPDATE, DELETE, FETCH TO GET DIAGONISTICS
+WE USE
+
+C/EXEC SQL
+C+ GET DIAGNOSTICS
+C+     :ROWSCOUNT = ROW_COUNT
+C/END-EXEC
+
+
+CURSOR => FETCHES ONE BY ONE RECORD FROM RESULT TABLE
+
+
+STEPS FOR CURSOR :
+
+DECLARE
+OPEN
+FETCH/UPDATE
+CLOSE
+
+
+
+SERIAL CURSOR=> DEFINIED WITHOUT SCROLL KEYWORD
+SIMILAR TO SETLL
+
+SCROLABLE CURSOR IT CAN BE READ MULTIPLE TIMES
+
+FETCH => FIRST/LAST/NEXT/PRIOR/AFTER/ BEFORE/RELATIVE CURRENT/CURRENT
+
+
+TYPES OF CURSOR:
+SENSITIVE => WHATEVER CHANGES MADE CAN BE SEEN BY OTHERS
+
+INSENSITIVE => OTHERS CANNOT SEE THE CAHNGES MADE BY YOU 
+
+data structure can be a host variable
+but array cannot be a host variable
+
+DYNAMIC VARIABLE :
+TYPES
+QUERY STORED IN A VARIABLE
+2 WAY => PREPARE + EXECUTE => SELECT AND NON SELECT TOTAL FOUR COMBINATIONS ARE POSSIBLE
+
+
+HOST VARIABLE ARE USED AS ? QUESTION MARKS
+ AND ARE CALLED PARAMETERS MARKER
+
+
+RO USE QUOTES INSIDE QUOTES YOU NEED TO USE ' "   "  ' 
+
+
+
+DISPLAY SCREEEN 
+EXTFMT RECORD
+IF *IN06 = *ON
+VAR= 'INSERT QUERY'
+PREPARE 
+EXECUTE
+
+
+
+CLEAR THE EXISRING DATA
+TURN ON SFLCLR THEN TURN OFF CLEAR INDICATOR
+
+SOMETIME DECLARE IN F SPEC ABOUNT RRN
+
+
+LOADIN SUBROUTINE
+
+SET OFF SFL INDICATOR 
+IF SFLEND IN ON => END ON MENS BOTTOM
+		END OFF MEANS THERE IS MORE OPTION
+SETLL AND START /DECALRE THE CURSOR IN SQL OPN CURSOR AND FETCH
+START WITH THE LOOP : MOVE THE VALUES INTO SUBFILE
+INCREMENT THE VALUES OF RRN
+IF RRN>9999(LOAD ALL AND EXPAND ALL) NOT FOR SINGLE PAGE
+IF GREATER THAN 9999 SET ON SFL END INDICATOR
+
+DISPLAY:
+
+SET ON SFLDSP AND SFLDSPTL
+
+IF RRN<0 
+WRITE ON FOOTER
+WRITE ON SFL
+SUBFIEL OF FILE INFORMATION DATA STRUCTURE 378  389 USED ON CODE
+(TO AVIOD PRESSING ENTER AND MOVING ON THE TOP)
+
+
+
+IN SUBFIELD : OVERLAY
+IN ARRAY : USE ASCEND OR DESCEND
+
+C+ WHENEVER SQLERROR GOTO WERROR => for error
+
+C+ WHENEVER NOT FOUND GO TO WNODATA => for not found
+
+C+ WHENEVER SQLWARNING CONTINUE  => for warning
+
+use tag to go to tag
+
+
+XML is similar to HTML
+
+
+XML prolog/ XML declaration => which is in the top of line
+
+  <start tag>
+	<fld1>"hello"</fld1>
+	<fld2>"33</flfd2>
+	<fld3>
+		<fld31>"xyz"</fld31>
+		<fld32>101</fld32>
+	</fld3>
+	</endtag>
+
+Element can contain alphanumeric and characters
+Hyphen, underscore, and period can be used in xml.
+
+XML tags are case sensitive.
+
+<!-- commenting -->
+
+&lt => less than
+&gt => greater than
+&amp => to display &
+&hyp
+&aph
+
+OPCOD:
+XML-INTO <DS NAME>%XML(FILENAME:OPTIONS);
+
+OPTIONS = 'CASE=ANY'
+	  'DOC = FILE'
+	  'ALLOWMISSING=YES'
+	  'ALLOWEXTRA = YES'
+	  'PATH = <XML_Pth'>
+
+shift+f1 to change capslock
+
+
+array==
+
+when there is multiple occurrence we use array
+ex:
+name=a, phone=1
+name=b, phone=2
+name=c,phone=3
+
+
+data structure:
+name=a, phone= 2, address = zql
+
+YAJAL has to be added to the added to bottom of the list
+
+
+DATA-GEN => TO CREATE JSON FILE
+
+PARSING => MEANS BREAKING AND SENDING
+
+
+	XML						JSON	
+
+PARSING		 	   GEN				GEN			PARSING
+XML-INTO         	SQL CODE		      DATA-GEN			DATA-INTO  
+%XML(XML NAME:		XML GROUP FROM PF	     DATA (ISM:OPTION)		%DATA()
+	OPTIONS)					%GEN 
+
+
+FREE FORMAT:
+
+Dcl-s for all other
+Dcl-c for constants
+
+
+
+
+
+In free format use chain ----empno--- and file record format
+
+Ctl-opt => correspond to H spec
+Dcl-Ds => declaration
+
+DELETE has higher precedence: it can be used to update, delete
+
+
+SQLRPGLE
+SQL DDL
+
+
+In free form 
+EXEC SQL --start sql query''
+erwe
+ere;
+
+Dsply 'name ' '  'Lastname 
+
+Inz(*Likeds) => uses the Initial Values
+
+files default mode is input
+printer file mode is output
+
+Likerec by default gets qualified
+
+%kds is used to chain a subfield 
+
+NO free format for *entry  plist to receive the parameters from one program to another
+To receive convert the call program to subprocedure.
+
+
+****************************************************************
+In stored procedures can conditions like do if ect can be used
+
+It is the faster way of accessing data from oustside world
+It has set of SQL statement SQL SP  and external SP
+
+Declaration and definition are given inside SQL and inside RPGLE
+
+Create procedure  by command : CREATE PROCDURE
+
+Use RUNSQLSTM 
+Begin with BEGIN and end with END
+
+Input parameter as IN 'name of file'
+Output parameter as OUT 'name of file'
+
+CHAR/NUMERIC/INT/DECIMAL
+
+CASE/WHEN/IF-ELSE,GOTO,LOAD,FOR,LEAVE, ITERATE, WHILE, REPEAT
+
+Exception handling is needed.
+Declare continue Handler for Not found
+
+declare SQL handler for SQL Exception
+
+Declare UNDO handler for Exception
+
+-> prepare execute can be used (dynamic sql)
+
+SET variable name value (NULL/literal like numbers/expressions)
+
+
+Cursor with 4 steps
+
+Can CREATE OR REPLACE variable name value
+
+for global variable delete the global variable
+using DROP variable name
+
+DROP PROCEDURE IF EXIST => useful if procedure exist
+
+command to call a store procedure: CALL store procedure
+
+For debug RUNSQLSTM with *source
+commit *NONE
+STRDBG
+CALL stored procedure inside STRSQL
+ENDDBG
+
+
+FOR DECIMAL IN STORED PROCEDURE DECIMAL ( 5, 2)
+
+TO EXECUTE A STORED PROCEDURE RUN USING RUNSTRSQL THEN:**********
+
+SELECT SPECIFIC_SCHEMA, SPECIFIC_NAME, IN_PARMS, OUT_PARMS FROM 
+sysroutines WHERE specific_schema = 'MANI120211'   
+
+Can be executed as below from inside sqlrpgle as:************
+
+exec sql   call update_salary_1 ( 1, 1.5);
+
+
+create or replace variable tmp_dept char(25)
+
+Variable TMP_DEPT was created in MANI120211.
+ 
+set tmp_dept = 'QA'    
+
+SET statement complete.
+ 
+command to check if global variable is created
+ 
+v
+ 
+select tmp_dept from sysibm.sysdummy1
+
+create or replace variable myempcnt int default(0)
+ 
+create or replace variable myempsal decimal ( 15, 2) default(0)
+ 
+ CALL STORED PROCEDURE_NAME (TMP_DEPT, MYEMPCNT, MYEMPSAL)
+
+COMMENT BY => --THIS IS A COMMENT
+
+
+If there is no variable to return and give just open and close ()
+
+runsqlstm => *source and give the txt name
+
+strdbg => for the stored procedure
+
+
+CREATE TYPE arry name AS INT/CHAR/CHAR
+
+DECLARE ARRY1 arry name
+
+set array[1] = 100 
+set var = arry1[1]
+
+SET VAR1 = ARRAY_FIRST => keyword to get first element
+SET VAR1 = ARRAY_LAST => keyword to get last element
+SET VAR1 = ARRAY_NEXT(array1, var)
+
+cardinality shows the number of elements in the array.
+
+UDF **********
+
+CREATE OR REPLACE
+FUNCTION fname(-parameters-)
+
+DROP FUNCTION fname
+
+SELECT * FROM SYSFUNCS
+
+Body & declaration -> Begin & end
+
+CASE-WHEN'
+IF-ELSE-ENDIF,
+LOOPS(WHILE,FOR)
+
+SET to set values
+
+RETURN output of UDF
+
+FOR UDF USE SELECT query on sql line on any on the fields  ********
+
+stored procedure and external stored procedures (creation types)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
